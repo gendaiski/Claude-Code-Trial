@@ -1,0 +1,16 @@
+{
+  "name": "workflow-library",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A self-hosted library of workflows imported from workflowhubegy.com",
+  "scripts": {
+    "fetch": "node scripts/fetch-library.mjs",
+    "import": "node scripts/import-local.mjs",
+    "catalog": "node scripts/build-catalog.mjs",
+    "validate": "node scripts/build-catalog.mjs --check"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
