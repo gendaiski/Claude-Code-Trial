@@ -1,47 +1,51 @@
 #!/usr/bin/env node
 /**
- * Pull every workflow from the WorkflowHub Egypt library into ./workflows.
+ * Pull the whole workflowhubegy.com library into ./workflows.
  *
- * Run this from a machine that can reach the site:
+ *   node scripts/fetch-library.mjs --dry-run     # discover only, write nothing
+ *   node scripts/fetch-library.mjs               # download everything, resumable
+ *   node scripts/fetch-library.mjs --concurrency 16
+ *   node scripts/fetch-library.mjs --cookie "session=..."   # if it needs a login
  *
- *   node scripts/fetch-library.mjs --dry-run   # show what was found, write nothing
- *   node scripts/fetch-library.mjs             # download everything
- *   node scripts/fetch-library.mjs --cookie "session=..."   # if the library is behind a login
+ * Built for a library in the tens of thousands: it pages through the listing,
+ * downloads in parallel with retries, skips anything already on disk, and
+ * streams each definition straight to a file. Nothing is buffered in memory and
+ * nothing passes through a chat context, so the cost is bandwidth and time.
  *
- * The site's markup is not known ahead of time, so discovery runs through a
- * chain of strategies and reports which one produced the list. If all of them
- * come up empty the raw HTML is left in ./raw for inspection.
+ * Re-running is safe and cheap — it only fetches what is missing, so an
+ * interrupted run picks up where it stopped.
  */
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile, readdir, access } from 'node:fs/promises';
 import path from 'node:path';
 
 const BASE = process.env.LIBRARY_BASE ?? 'https://workflowhubegy.com';
-const LIBRARY_URL = new URL(process.env.LIBRARY_PATH ?? '/library', BASE).href;
+const LIBRARY_PATH = process.env.LIBRARY_PATH ?? '/library';
 const ROOT = path.resolve(import.meta.dirname, '..');
 const OUT = path.join(ROOT, 'workflows');
 const RAW = path.join(ROOT, 'raw');
 
 const args = process.argv.slice(2);
-const dryRun = args.includes('--dry-run');
-const cookie = valueOf('--cookie');
-const limit = Number(valueOf('--limit') ?? Infinity);
+const flag = (name) => args.includes(name);
+const value = (name, fallback) => {
+  const i = args.indexOf(name);
+  return i === -1 ? fallback : args[i + 1];
+};
 
-function valueOf(flag) {
-  const i = args.indexOf(flag);
-  return i === -1 ? undefined : args[i + 1];
-}
+const dryRun = flag('--dry-run');
+const force = flag('--force');
+const concurrency = Math.max(1, Number(value('--concurrency', 8)));
+const limit = Number(value('--limit', Infinity));
+const maxPages = Number(value('--max-pages', 2000));
+const cookie = value('--cookie');
 
 const headers = {
-  'user-agent': 'workflow-library-importer/0.1 (+personal archive)',
+  'user-agent': 'workflow-library-importer/1.0 (+personal archive)',
   accept: 'text/html,application/json;q=0.9,*/*;q=0.8',
   ...(cookie ? { cookie } : {}),
 };
 
-async function get(url, as = 'text') {
-  const res = await fetch(url, { headers, redirect: 'follow' });
-  if (!res.ok) throw new Error(`${res.status} ${res.statusText} for ${url}`);
-  return as === 'json' ? res.json() : res.text();
-}
+const exists = (p) => access(p).then(() => true, () => false);
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const slugify = (s) =>
   String(s)
@@ -52,80 +56,44 @@ const slugify = (s) =>
     .replace(/^-+|-+$/g, '')
     .slice(0, 80) || 'workflow';
 
-/** Strategy 1: framework payloads embedded in the page. */
-function fromEmbeddedState(html) {
-  const patterns = [
-    /<script[^>]+id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/,
-    /window\.__NUXT__\s*=\s*({[\s\S]*?});?\s*<\/script>/,
-    /window\.__INITIAL_STATE__\s*=\s*({[\s\S]*?});?\s*<\/script>/,
-  ];
-  for (const re of patterns) {
-    const m = html.match(re);
-    if (!m) continue;
-    try {
-      return collectWorkflowish(JSON.parse(m[1]));
-    } catch {
-      /* not JSON after all — fall through */
-    }
+/** Fetch with retries. Backs off on 429 and 5xx; gives up on a real 404. */
+async function get(url, as = 'text', attempt = 1) {
+  try {
+    const res = await fetch(url, { headers, redirect: 'follow' });
+    if (res.status === 404) throw Object.assign(new Error(`404 ${url}`), { fatal: true });
+    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+    return as === 'json' ? res.json() : res.text();
+  } catch (err) {
+    if (err.fatal || attempt >= 4) throw err;
+    // 1s, 4s, 9s — enough to ride out a rate limit without stalling the run.
+    await sleep(1000 * attempt * attempt);
+    return get(url, as, attempt + 1);
   }
-  return [];
 }
 
-/** Strategy 2: schema.org ItemList / CreativeWork blocks. */
-function fromJsonLd(html) {
-  const out = [];
-  const re = /<script[^>]+application\/ld\+json[^>]*>([\s\S]*?)<\/script>/g;
-  for (const m of html.matchAll(re)) {
-    try {
-      out.push(...collectWorkflowish(JSON.parse(m[1])));
-    } catch {
-      /* ignore malformed block */
-    }
-  }
-  return out;
-}
-
-/** Strategy 3: the JSON API the page itself is probably calling. */
-async function fromApi() {
-  const candidates = [
-    '/api/workflows',
-    '/api/library',
-    '/api/v1/workflows',
-    '/library.json',
-    '/workflows.json',
-    '/wp-json/wp/v2/workflow?per_page=100',
-  ];
-  for (const p of candidates) {
-    const url = new URL(p, BASE).href;
-    try {
-      const found = collectWorkflowish(await get(url, 'json'));
-      if (found.length) {
-        console.log(`  api endpoint responded: ${url}`);
-        return found;
+/** Run `worker` over `items`, `concurrency` at a time, reporting as it goes. */
+async function pool(items, worker, onProgress) {
+  let index = 0;
+  let done = 0;
+  const runners = Array.from({ length: Math.min(concurrency, items.length) }, async () => {
+    while (index < items.length) {
+      const item = items[index++];
+      try {
+        await worker(item);
+      } catch (err) {
+        onProgress?.({ done: ++done, total: items.length, error: err, item });
+        continue;
       }
-    } catch {
-      /* endpoint absent — try the next */
+      onProgress?.({ done: ++done, total: items.length });
     }
-  }
-  return [];
+  });
+  await Promise.all(runners);
 }
 
-/** Strategy 4: plain anchors on the page. */
-function fromAnchors(html) {
-  const out = new Map();
-  const re = /<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
-  for (const [, href, inner] of html.matchAll(re)) {
-    if (!/workflow|template|automation|\.json$/i.test(href)) continue;
-    if (/^(#|mailto:|javascript:)/i.test(href)) continue;
-    const url = new URL(href, LIBRARY_URL).href;
-    if (new URL(url).origin !== new URL(BASE).origin) continue;
-    const title = inner.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-    if (!out.has(url)) out.set(url, { title: title || url, url });
-  }
-  return [...out.values()];
-}
+// --- discovery ------------------------------------------------------------
+// The site's markup is not known ahead of time, so these run in order and the
+// first that yields anything wins. Each returns {title, url, slug, ...}.
 
-/** Walk arbitrary JSON and pull out anything that looks like a workflow record. */
 function collectWorkflowish(node, acc = [], seen = new Set()) {
   if (!node || typeof node !== 'object' || seen.has(node)) return acc;
   seen.add(node);
@@ -134,10 +102,7 @@ function collectWorkflowish(node, acc = [], seen = new Set()) {
     return acc;
   }
   const title = node.title ?? node.name ?? node.workflowName;
-  const looksLikeOne =
-    typeof title === 'string' &&
-    (node.nodes || node.slug || node.id || node.url || node.description);
-  if (looksLikeOne) {
+  if (typeof title === 'string' && (node.nodes || node.slug || node.id || node.url)) {
     acc.push({
       title,
       slug: node.slug,
@@ -146,7 +111,6 @@ function collectWorkflowish(node, acc = [], seen = new Set()) {
       category: node.category ?? node.categories ?? node.type,
       tags: node.tags ?? node.keywords,
       url: node.url ?? node.link ?? node.permalink,
-      // A payload with `nodes` is already the workflow definition itself.
       definition: node.nodes ? node : undefined,
     });
   }
@@ -154,14 +118,93 @@ function collectWorkflowish(node, acc = [], seen = new Set()) {
   return acc;
 }
 
-/** Given a workflow's detail page, find the definition JSON. */
+function fromEmbeddedState(html) {
+  for (const re of [
+    /<script[^>]+id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/,
+    /window\.__NUXT__\s*=\s*({[\s\S]*?});?\s*<\/script>/,
+    /window\.__INITIAL_STATE__\s*=\s*({[\s\S]*?});?\s*<\/script>/,
+  ]) {
+    const m = html.match(re);
+    if (!m) continue;
+    try {
+      return collectWorkflowish(JSON.parse(m[1]));
+    } catch { /* not JSON after all */ }
+  }
+  return [];
+}
+
+function fromAnchors(html, pageUrl) {
+  const out = new Map();
+  for (const [, href, inner] of html.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi)) {
+    if (!/workflow|template|automation|\.json$/i.test(href)) continue;
+    if (/^(#|mailto:|javascript:)/i.test(href)) continue;
+    const url = new URL(href, pageUrl).href;
+    if (new URL(url).origin !== new URL(BASE).origin) continue;
+    const title = inner.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!out.has(url)) out.set(url, { title: title || url, url });
+  }
+  return [...out.values()];
+}
+
+/** Walk the listing page by page until it stops yielding anything new. */
+async function discover() {
+  const found = new Map();
+  const apiCandidates = ['/api/workflows', '/api/library', '/api/v1/workflows', '/wp-json/wp/v2/workflow'];
+
+  // A JSON API is the only sane way to page through tens of thousands.
+  for (const endpoint of apiCandidates) {
+    try {
+      let page = 1;
+      let got = 0;
+      for (; page <= maxPages; page++) {
+        const url = new URL(`${endpoint}${endpoint.includes('?') ? '&' : '?'}page=${page}&per_page=100`, BASE).href;
+        const batch = collectWorkflowish(await get(url, 'json'));
+        if (!batch.length) break;
+        for (const e of batch) found.set(e.url ?? e.slug ?? e.id ?? e.title, e);
+        got += batch.length;
+        if (found.size >= limit) break;
+        process.stdout.write(`\r  ${endpoint}: page ${page}, ${found.size} workflow(s)   `);
+      }
+      if (got) {
+        process.stdout.write('\n');
+        console.log(`  discovered via ${endpoint}`);
+        return [...found.values()];
+      }
+    } catch { /* endpoint absent — try the next */ }
+  }
+
+  // Otherwise page the HTML listing.
+  for (let page = 1; page <= maxPages; page++) {
+    const url = new URL(page === 1 ? LIBRARY_PATH : `${LIBRARY_PATH}?page=${page}`, BASE).href;
+    let html;
+    try {
+      html = await get(url);
+    } catch {
+      break;
+    }
+    if (page === 1) {
+      await mkdir(RAW, { recursive: true });
+      await writeFile(path.join(RAW, 'library.html'), html);
+    }
+    const batch = [...fromEmbeddedState(html), ...fromAnchors(html, url)];
+    const before = found.size;
+    for (const e of batch) found.set(e.url ?? e.slug ?? e.title, e);
+    process.stdout.write(`\r  listing page ${page}: ${found.size} workflow(s)   `);
+    if (found.size === before) break; // page added nothing new — we're at the end
+    if (found.size >= limit) break;
+  }
+  process.stdout.write('\n');
+  return [...found.values()];
+}
+
+/** Find the definition JSON for one workflow. */
 async function resolveDefinition(entry) {
   if (entry.definition) return entry.definition;
   if (!entry.url) return undefined;
   if (entry.url.endsWith('.json')) return get(entry.url, 'json');
 
   const html = await get(entry.url);
-  const embedded = [...fromEmbeddedState(html), ...fromJsonLd(html)].find((e) => e.definition);
+  const embedded = fromEmbeddedState(html).find((e) => e.definition);
   if (embedded) return embedded.definition;
 
   const link = html.match(/href=["']([^"']+\.json(?:\?[^"']*)?)["']/i);
@@ -171,77 +214,84 @@ async function resolveDefinition(entry) {
   if (inline) {
     try {
       return JSON.parse(inline[1]);
-    } catch {
-      /* not a definition */
-    }
+    } catch { /* not a definition */ }
   }
   return undefined;
 }
 
 async function main() {
-  console.log(`Reading ${LIBRARY_URL}`);
-  const html = await get(LIBRARY_URL);
-  await mkdir(RAW, { recursive: true });
-  await writeFile(path.join(RAW, 'library.html'), html);
+  console.log(`Reading ${new URL(LIBRARY_PATH, BASE).href}`);
+  const entries = (await discover()).slice(0, limit === Infinity ? undefined : limit);
+  console.log(`Found ${entries.length.toLocaleString('en-US')} workflow(s).`);
 
-  let entries = fromEmbeddedState(html);
-  let via = 'embedded state';
-  if (!entries.length) (entries = fromJsonLd(html)), (via = 'json-ld');
-  if (!entries.length) (entries = await fromApi()), (via = 'json api');
-  if (!entries.length) (entries = fromAnchors(html)), (via = 'page anchors');
-
-  const unique = [...new Map(entries.map((e) => [e.url ?? e.slug ?? e.title, e])).values()];
-  console.log(`Found ${unique.length} workflow(s) via ${via}.`);
-
-  if (!unique.length) {
+  if (!entries.length) {
     console.error(
-      `\nNothing matched. The page HTML is saved at ${path.relative(ROOT, RAW)}/library.html —\n` +
-        `open it, find how the list is delivered, and adjust the strategies in this script.\n` +
-        `If the list loads over XHR, pass the real endpoint: LIBRARY_PATH=/api/... node scripts/fetch-library.mjs`
+      `\nNothing matched. The page HTML is saved at raw/library.html — open it, find how the\n` +
+        `listing is delivered, and point the fetcher straight at it:\n` +
+        `  LIBRARY_PATH=/api/whatever node scripts/fetch-library.mjs`
     );
     process.exitCode = 1;
     return;
   }
 
-  let saved = 0;
-  for (const entry of unique.slice(0, limit)) {
-    const slug = slugify(entry.slug ?? entry.title);
-    if (dryRun) {
-      console.log(`  ${slug}  ${entry.url ?? ''}`);
-      continue;
-    }
-    let definition;
-    try {
-      definition = await resolveDefinition(entry);
-    } catch (err) {
-      console.warn(`  ! ${slug}: ${err.message}`);
-    }
-    const dir = path.join(OUT, slug);
-    await mkdir(dir, { recursive: true });
-    await writeFile(
-      path.join(dir, 'meta.json'),
-      JSON.stringify(
-        {
-          title: entry.title,
-          slug,
-          description: entry.description ?? '',
-          category: entry.category ?? 'uncategorized',
-          tags: [entry.tags ?? []].flat().filter(Boolean),
-          source: entry.url ?? LIBRARY_URL,
-          retrievedAt: new Date().toISOString(),
-        },
-        null,
-        2
-      ) + '\n'
-    );
-    if (definition) {
-      await writeFile(path.join(dir, 'workflow.json'), JSON.stringify(definition, null, 2) + '\n');
-    }
-    saved += 1;
-    console.log(`  ${definition ? '+' : '~'} ${slug}${definition ? '' : ' (metadata only)'}`);
+  if (dryRun) {
+    for (const e of entries.slice(0, 40)) console.log(`  ${slugify(e.slug ?? e.title)}  ${e.url ?? ''}`);
+    if (entries.length > 40) console.log(`  … and ${entries.length - 40} more`);
+    return;
   }
 
-  if (!dryRun) console.log(`\nSaved ${saved} workflow(s) to ${path.relative(ROOT, OUT)}/.`);
+  // Resume: anything already downloaded is skipped unless --force.
+  const onDisk = new Set(
+    (await exists(OUT)) ? (await readdir(OUT, { withFileTypes: true })).filter((d) => d.isDirectory()).map((d) => d.name) : []
+  );
+  const todo = force ? entries : entries.filter((e) => !onDisk.has(slugify(e.slug ?? e.title)));
+  console.log(`${onDisk.size} already on disk; fetching ${todo.length.toLocaleString('en-US')} at concurrency ${concurrency}.`);
+
+  const failures = [];
+  const started = Date.now();
+  await pool(
+    todo,
+    async (entry) => {
+      const slug = slugify(entry.slug ?? entry.title);
+      const definition = await resolveDefinition(entry);
+      const dir = path.join(OUT, slug);
+      await mkdir(dir, { recursive: true });
+      if (definition) await writeFile(path.join(dir, 'workflow.json'), JSON.stringify(definition, null, 2) + '\n');
+      await writeFile(
+        path.join(dir, 'meta.json'),
+        JSON.stringify(
+          {
+            title: entry.title,
+            slug,
+            description: entry.description ?? '',
+            category: entry.category ?? 'uncategorized',
+            tags: [entry.tags ?? []].flat().filter(Boolean),
+            source: entry.url ?? new URL(LIBRARY_PATH, BASE).href,
+            retrievedAt: new Date().toISOString(),
+          },
+          null,
+          2
+        ) + '\n'
+      );
+    },
+    ({ done, total, error, item }) => {
+      if (error) failures.push({ item, error: error.message });
+      if (done % 25 === 0 || done === total) {
+        const rate = done / ((Date.now() - started) / 1000);
+        const left = rate ? Math.round((total - done) / rate) : 0;
+        process.stdout.write(
+          `\r  ${done.toLocaleString('en-US')}/${total.toLocaleString('en-US')}` +
+            `  ${rate.toFixed(1)}/s  ~${left}s left  ${failures.length} failed   `
+        );
+      }
+    }
+  );
+  process.stdout.write('\n');
+
+  if (failures.length) {
+    await writeFile(path.join(RAW, 'failures.json'), JSON.stringify(failures, null, 2) + '\n');
+    console.warn(`${failures.length} failed — listed in raw/failures.json. Re-run to retry just those.`);
+  }
   console.log('Next: node scripts/build-catalog.mjs');
 }
 

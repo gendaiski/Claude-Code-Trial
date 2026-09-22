@@ -97,3 +97,23 @@ Team/contract-review-redlines/`) import correctly. For each workflow it takes:
 
 `README.md` is copied into the workflow's folder as-is, so each workflow keeps
 its own setup notes, Claude prompt, and safety note next to the definition.
+
+## Importing a large library
+
+Past 200 workflows the README stops listing them individually: it shows a
+category summary instead, `catalog/by-category/<category>.md` indexes each
+category, and `catalog/index.json` still holds every entry. Nothing else about
+the layout changes, and the same commands work at any size.
+
+Two things matter when the count is in the thousands:
+
+- **Use the HTTP path, not a connector.** `scripts/fetch-library.mjs` streams each
+  definition straight to disk. Pulling the same files through an assistant's
+  file connector means every byte passes through the model's context, which is
+  thousands of times more expensive and will run out long before the import
+  finishes. At ~5 KB per definition, 27,000 workflows is ~142 MB — trivial over
+  HTTP, impossible through a chat channel.
+- **Expect about three files per workflow.** 27,000 workflows is ~81,000 files.
+  That is fine for git, but `git status` and the first clone will be slow. If it
+  becomes a problem, drop the per-workflow `README.md` at import and keep the
+  definition plus `meta.json`.
