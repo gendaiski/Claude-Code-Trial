@@ -1,0 +1,14 @@
+{
+  "title": "Social Repurpose Studio",
+  "slug": "social-repurpose",
+  "description": "Turn one long piece into platform-native posts for each channel.",
+  "category": "Marketing & Content Department",
+  "tags": [
+    "Marketing & Content Department",
+    "drafting-social-posts"
+  ],
+  "trigger": "Webhook POST /repurpose",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/01 Marketing & Content Department/social-repurpose",
+  "retrievedAt": "2026-09-22T14:35:36.249Z"
+}

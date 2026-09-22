@@ -72,3 +72,28 @@ This regenerates `catalog/index.json` and the table in `README.md`. CI runs
 Both importers overwrite a workflow's folder in place, keyed by slug. Re-running
 the fetcher refreshes the library and leaves the git history as the record of
 what changed between pulls.
+
+## Option C — import a department-organised n8n tree
+
+If the workflows are laid out as `<department>/<slug>/workflow.json` (optionally
+with a `README.md` and diagrams alongside):
+
+```bash
+node scripts/import-n8n-tree.mjs ~/path/to/n8n-workflows
+node scripts/build-catalog.mjs
+```
+
+The importer walks to any depth, so nested teams (`Legal Department/02 Contracts
+Team/contract-review-redlines/`) import correctly. For each workflow it takes:
+
+- **title** — the README's H1, falling back to the definition's `name`
+- **description** — the first prose line under the H1
+- **category** — the README's `**Department:**` or `**Team:**` field, falling
+  back to the top-level folder with any `01 ` ordering prefix stripped; a
+  workflow sitting at the top level is filed under `General`
+- **tags** — the definition's own tags plus the README's `**Agent Skills:**`
+- **trigger / integrations / humanGate** — the matching README fields
+- **nodeCount** — the length of the definition's `nodes` array
+
+`README.md` is copied into the workflow's folder as-is, so each workflow keeps
+its own setup notes, Claude prompt, and safety note next to the definition.

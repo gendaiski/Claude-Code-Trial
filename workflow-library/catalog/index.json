@@ -1,5 +1,60 @@
 {
-  "generatedAt": "2026-09-22T14:02:02.267Z",
-  "count": 0,
-  "workflows": []
+  "generatedAt": "2026-09-22T14:35:58.684Z",
+  "count": 4,
+  "workflows": [
+    {
+      "slug": "01-lead-qualify-and-route",
+      "title": "Lead Qualify & Route",
+      "description": "Qualify an inbound lead against your ICP; route good fits to the CRM + rep, archive the rest.",
+      "category": "General",
+      "tags": [],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/01 Lead Qualify and Route",
+      "path": "workflows/01-lead-qualify-and-route",
+      "hasDefinition": true,
+      "nodeCount": 8
+    },
+    {
+      "slug": "content-brief-to-draft",
+      "title": "Content Brief → Draft",
+      "description": "Turn a content brief into a researched, on-brand first draft for approval.",
+      "category": "Marketing & Content Department",
+      "tags": [
+        "Marketing & Content Department",
+        "content-ops-manager",
+        "editing-prose"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/01 Marketing & Content Department/content-brief-to-draft",
+      "path": "workflows/content-brief-to-draft",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "seo-article-pipeline",
+      "title": "SEO Article Pipeline",
+      "description": "Expand a target keyword into an SEO-structured outline and draft.",
+      "category": "Marketing & Content Department",
+      "tags": [
+        "Marketing & Content Department",
+        "writing-seo-content"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/01 Marketing & Content Department/seo-article-pipeline",
+      "path": "workflows/seo-article-pipeline",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "social-repurpose",
+      "title": "Social Repurpose Studio",
+      "description": "Turn one long piece into platform-native posts for each channel.",
+      "category": "Marketing & Content Department",
+      "tags": [
+        "Marketing & Content Department",
+        "drafting-social-posts"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/01 Marketing & Content Department/social-repurpose",
+      "path": "workflows/social-repurpose",
+      "hasDefinition": true,
+      "nodeCount": 6
+    }
+  ]
 }
