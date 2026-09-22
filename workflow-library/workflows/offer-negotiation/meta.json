@@ -1,0 +1,14 @@
+{
+  "title": "Offer & Negotiation Summary",
+  "slug": "offer-negotiation",
+  "description": "Summarise an offer, compare to valuation, and draft counter options.",
+  "category": "Real Estate Brokerage",
+  "tags": [
+    "Real Estate Brokerage",
+    "negotiating-offers"
+  ],
+  "trigger": "Webhook POST /re-offer",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/10 Real Estate Brokerage Department/offer-negotiation",
+  "retrievedAt": "2026-09-22T14:56:03.458Z"
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Ticket Triage & Escalate",
+  "slug": "ticket-triage-escalate",
+  "description": "Classify a support ticket, set priority, and route or escalate.",
+  "category": "Customer Support Department",
+  "tags": [
+    "Customer Support Department",
+    "handling-support-tickets",
+    "support-manager"
+  ],
+  "trigger": "Webhook POST /ticket",
+  "nodeCount": 8,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/03 Customer Support Department/ticket-triage-escalate",
+  "retrievedAt": "2026-09-22T14:56:03.423Z"
+}

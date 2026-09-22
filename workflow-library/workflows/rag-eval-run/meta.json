@@ -1,0 +1,14 @@
+{
+  "title": "RAG Eval Run",
+  "slug": "rag-eval-run",
+  "description": "Run an eval set against a RAG feature and report pass/fail.",
+  "category": "Engineering & Product Department",
+  "tags": [
+    "Engineering & Product Department",
+    "building-rag-systems"
+  ],
+  "trigger": "Schedule (daily)",
+  "nodeCount": 7,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/08 Engineering & Product Department/rag-eval-run",
+  "retrievedAt": "2026-09-22T14:56:03.448Z"
+}

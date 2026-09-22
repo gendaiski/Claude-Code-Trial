@@ -1,0 +1,15 @@
+{
+  "title": "Contract Review & Redlines",
+  "slug": "contract-review-redlines",
+  "description": "Review a contract against the playbook and propose clause-by-clause redlines.",
+  "category": "Contracts Team",
+  "tags": [
+    "Legal Department",
+    "reviewing-commercial-contracts",
+    "drafting-legal-memos"
+  ],
+  "trigger": "Webhook POST /contract-review",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/02 Contracts Team/contract-review-redlines",
+  "retrievedAt": "2026-09-22T14:56:03.465Z"
+}

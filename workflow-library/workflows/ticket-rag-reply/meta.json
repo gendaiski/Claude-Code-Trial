@@ -1,0 +1,14 @@
+{
+  "title": "Support RAG Reply",
+  "slug": "ticket-rag-reply",
+  "description": "Draft a grounded reply from your knowledge base for agent review.",
+  "category": "Customer Support Department",
+  "tags": [
+    "Customer Support Department",
+    "handling-support-tickets"
+  ],
+  "trigger": "Webhook POST /support-reply",
+  "nodeCount": 8,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/03 Customer Support Department/ticket-rag-reply",
+  "retrievedAt": "2026-09-22T14:56:03.417Z"
+}

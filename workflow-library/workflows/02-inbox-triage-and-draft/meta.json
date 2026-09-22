@@ -1,0 +1,13 @@
+{
+  "title": "Inbox Triage & Draft",
+  "slug": "02-inbox-triage-and-draft",
+  "description": "Triage inbound email, extract the ask, and draft a reply in your voice for approval.",
+  "category": "General",
+  "tags": [],
+  "trigger": "Schedule (swap for email trigger)",
+  "integrations": "Anthropic API; Gmail/IMAP; Google Sheets",
+  "humanGate": "Human approves every reply before it sends.",
+  "nodeCount": 7,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/02 Inbox Triage and Draft",
+  "retrievedAt": "2026-09-22T14:56:03.404Z"
+}

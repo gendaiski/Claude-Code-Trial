@@ -1,0 +1,15 @@
+{
+  "title": "Issue → Fix Plan",
+  "slug": "issue-to-fix-pr",
+  "description": "Turn a bug/issue into a plan and a proposed patch summary.",
+  "category": "Engineering & Product Department",
+  "tags": [
+    "Engineering & Product Department",
+    "designing-systems",
+    "writing-tests"
+  ],
+  "trigger": "Webhook POST /issue",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/08 Engineering & Product Department/issue-to-fix-pr",
+  "retrievedAt": "2026-09-22T14:56:03.446Z"
+}

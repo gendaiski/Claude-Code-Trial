@@ -1,0 +1,15 @@
+{
+  "title": "Monthly Close Report",
+  "slug": "month-close-report",
+  "description": "Turn close data into a board-ready draft with variance narrative.",
+  "category": "Finance & Reporting Department",
+  "tags": [
+    "Finance & Reporting Department",
+    "monthly-financial-reporting",
+    "budgeting-and-forecasting"
+  ],
+  "trigger": "Webhook POST /month-close",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/05 Finance & Reporting Department/month-close-report",
+  "retrievedAt": "2026-09-22T14:56:03.433Z"
+}

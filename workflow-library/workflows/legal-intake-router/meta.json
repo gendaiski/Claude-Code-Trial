@@ -1,0 +1,14 @@
+{
+  "title": "Legal Intake Router",
+  "slug": "legal-intake-router",
+  "description": "Classify any inbound legal request and route it to the right team.",
+  "category": "Intake & Routing",
+  "tags": [
+    "Legal Department",
+    "legal-ops-manager"
+  ],
+  "trigger": "Webhook POST /legal-intake",
+  "nodeCount": 7,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/01 Intake & Routing/legal-intake-router",
+  "retrievedAt": "2026-09-22T14:56:03.462Z"
+}

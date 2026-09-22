@@ -1,0 +1,14 @@
+{
+  "title": "IP Intake & Triage",
+  "slug": "ip-intake-triage",
+  "description": "Classify an IP matter, flag deadlines and priorities, and route.",
+  "category": "Intellectual Property",
+  "tags": [
+    "Legal Department",
+    "drafting-legal-memos"
+  ],
+  "trigger": "Webhook POST /ip-intake",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/07 Intellectual Property/ip-intake-triage",
+  "retrievedAt": "2026-09-22T14:56:03.473Z"
+}

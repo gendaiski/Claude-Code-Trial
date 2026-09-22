@@ -1,0 +1,14 @@
+{
+  "title": "Inbox Triage & Draft",
+  "slug": "inbox-triage-draft",
+  "description": "Triage an incoming email, classify it, and draft a reply.",
+  "category": "Operations & Knowledge Department",
+  "tags": [
+    "Operations & Knowledge Department",
+    "orchestrating-agents (Ops)"
+  ],
+  "trigger": "Webhook POST /inbox",
+  "nodeCount": 8,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/09 Operations & Knowledge Department/inbox-triage-draft",
+  "retrievedAt": "2026-09-22T14:56:03.449Z"
+}

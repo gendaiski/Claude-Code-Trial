@@ -1,0 +1,15 @@
+{
+  "title": "Lead Qualify & Route",
+  "slug": "lead-qualify-route",
+  "description": "Enrich and score an inbound lead against the ICP, then route it.",
+  "category": "Sales & Growth Department",
+  "tags": [
+    "Sales & Growth Department",
+    "researching-markets",
+    "growth-manager"
+  ],
+  "trigger": "Webhook POST /lead",
+  "nodeCount": 8,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/02 Sales & Growth Department/lead-qualify-route",
+  "retrievedAt": "2026-09-22T14:56:03.408Z"
+}

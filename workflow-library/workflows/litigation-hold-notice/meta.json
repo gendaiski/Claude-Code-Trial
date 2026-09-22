@@ -1,0 +1,14 @@
+{
+  "title": "Litigation Hold Notice",
+  "slug": "litigation-hold-notice",
+  "description": "Draft a litigation hold notice with custodians and sources to preserve.",
+  "category": "Litigation & Disputes",
+  "tags": [
+    "Legal Department",
+    "drafting-legal-memos"
+  ],
+  "trigger": "Webhook POST /litigation-hold",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/06 Litigation & Disputes/litigation-hold-notice",
+  "retrievedAt": "2026-09-22T14:56:03.472Z"
+}

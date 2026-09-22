@@ -10,5 +10,5 @@
   "trigger": "Webhook POST /repurpose",
   "nodeCount": 6,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/01 Marketing & Content Department/social-repurpose",
-  "retrievedAt": "2026-09-22T14:35:36.249Z"
+  "retrievedAt": "2026-09-22T14:56:03.401Z"
 }

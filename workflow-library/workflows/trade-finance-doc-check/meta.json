@@ -1,0 +1,14 @@
+{
+  "title": "Trade Finance Doc Check",
+  "slug": "trade-finance-doc-check",
+  "description": "Check LC / Incoterms documents for consistency and discrepancies.",
+  "category": "Trade & Commodities Department",
+  "tags": [
+    "Trade & Commodities Department",
+    "structuring-trade-finance"
+  ],
+  "trigger": "Webhook POST /tf-docs",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/06 Trade & Commodities Department/trade-finance-doc-check",
+  "retrievedAt": "2026-09-22T14:56:03.439Z"
+}

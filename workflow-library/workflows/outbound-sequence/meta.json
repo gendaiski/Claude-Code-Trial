@@ -1,0 +1,14 @@
+{
+  "title": "Outbound Sequence Draft",
+  "slug": "outbound-sequence",
+  "description": "Draft a personalised, multi-touch outreach sequence for a prospect.",
+  "category": "Sales & Growth Department",
+  "tags": [
+    "Sales & Growth Department",
+    "outbound-sales"
+  ],
+  "trigger": "Webhook POST /outbound",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/02 Sales & Growth Department/outbound-sequence",
+  "retrievedAt": "2026-09-22T14:56:03.409Z"
+}

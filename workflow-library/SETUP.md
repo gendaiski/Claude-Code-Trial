@@ -1,9 +1,9 @@
 # Moving this into its own repository
 
-This directory is a complete, standalone repository, parked here because
-creating `gendaiski/workflow-library` from the session failed with
-`403 Resource not accessible by integration` — the GitHub App installed on the
-account can read and write repositories but cannot create them.
+This directory is a complete, standalone repository holding all 51 workflows.
+It is parked here because creating `gendaiski/workflow-library` from the session
+failed with `403 Resource not accessible by integration` — the GitHub App
+installed on the account can read and write repositories but cannot create them.
 
 ## To give it its own home
 
@@ -15,7 +15,7 @@ account can read and write repositories but cannot create them.
    cd workflow-library
    git init -b main
    git add -A
-   git commit -m "Import the n8n workflow library"
+   git commit -m "Add the n8n workflow library"
    git remote add origin git@github.com:gendaiski/workflow-library.git
    git push -u origin main
    ```
@@ -25,15 +25,10 @@ account can read and write repositories but cannot create them.
 
 ## Where the workflows came from
 
-51 workflows were located in Dropbox under
-`/Claude Projects/Content Creation/Content Playbook/Agents & Automation/n8n Workflows (Ready-Made)`
-and all 102 files (`workflow.json` + `README.md`) were retrieved successfully.
+All 51 were read from Dropbox, under
+`/Claude Projects/Content Creation/Content Playbook/Agents & Automation/n8n Workflows (Ready-Made)`.
 
-Four are imported here. The rest were retrieved but could not be written to
-disk: the cheap, byte-exact path reads the session transcript, and the auto-mode
-permission classifier blocks that as `[Sensitive-Source Provenance]`. See the
-session notes for the two ways to finish the import.
-
-`workflowhubegy.com` itself is blocked by this environment's network egress
-policy, so the Dropbox set has **not** been reconciled against the published
-library listing.
+`workflowhubegy.com` is blocked by this environment's network egress policy, so
+the Dropbox set has **not** been reconciled against the published library
+listing. When the site is reachable, `scripts/fetch-library.mjs` pulls the
+published listing into the same layout and git shows the difference.

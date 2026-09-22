@@ -1,0 +1,15 @@
+{
+  "title": "PR Code Review",
+  "slug": "pr-code-review",
+  "description": "Review a pull-request diff and post structured review comments.",
+  "category": "Engineering & Product Department",
+  "tags": [
+    "Engineering & Product Department",
+    "reviewing-frontend-code",
+    "reviewing-backend-code"
+  ],
+  "trigger": "Webhook POST /pr-review",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/08 Engineering & Product Department/pr-code-review",
+  "retrievedAt": "2026-09-22T14:56:03.447Z"
+}

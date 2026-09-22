@@ -1,0 +1,13 @@
+{
+  "title": "Content Draft & Approve",
+  "slug": "04-content-draft-and-approve",
+  "description": "Turn a brief into a draft, carousel outline, and social post for editor approval.",
+  "category": "General",
+  "tags": [],
+  "trigger": "Webhook POST /content-brief",
+  "integrations": "Anthropic API; Docs/Notion; Slack",
+  "humanGate": "Editor approves the draft before publishing.",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/04 Content Draft and Approve",
+  "retrievedAt": "2026-09-22T14:56:03.427Z"
+}

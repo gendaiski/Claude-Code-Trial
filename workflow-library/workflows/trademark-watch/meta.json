@@ -1,0 +1,14 @@
+{
+  "title": "Trademark & GI Watch",
+  "slug": "trademark-watch",
+  "description": "Scan watch results weekly for confusingly similar marks and flag risk.",
+  "category": "Intellectual Property",
+  "tags": [
+    "Legal Department",
+    "monitoring-compliance"
+  ],
+  "trigger": "Schedule (weekly)",
+  "nodeCount": 7,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/07 Intellectual Property/trademark-watch",
+  "retrievedAt": "2026-09-22T14:56:03.474Z"
+}

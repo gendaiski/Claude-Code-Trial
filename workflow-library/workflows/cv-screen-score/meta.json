@@ -1,0 +1,14 @@
+{
+  "title": "CV Screening & Scoring",
+  "slug": "cv-screen-score",
+  "description": "Score a CV against a role and produce an interview kit.",
+  "category": "People & Hiring Department",
+  "tags": [
+    "People & Hiring Department",
+    "screening-candidates"
+  ],
+  "trigger": "Webhook POST /cv",
+  "nodeCount": 8,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/07 People & Hiring Department/cv-screen-score",
+  "retrievedAt": "2026-09-22T14:56:03.440Z"
+}

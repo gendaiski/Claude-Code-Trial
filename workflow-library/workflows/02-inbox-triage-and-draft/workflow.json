@@ -1,0 +1,162 @@
+{
+  "name": "Inbox Triage & Draft",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "53c16664-1335-45fb-9f44-a2da20475bdc",
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const input=$input.item.json;\nconst instruction=\"You are my inbox assistant. Classify this email as urgent|action|fyi|spam, extract the ask and deadline, and draft a reply in my voice. Return {\\\"category\\\":\\\"...\\\",\\\"ask\\\":\\\"...\\\",\\\"deadline\\\":\\\"...\\\",\\\"draft_reply\\\":\\\"...\\\"}.\";\nconst content=instruction+\"\\n\\nINPUT DATA (JSON):\\n\"+JSON.stringify(input,null,2)+\"\\n\\nReturn ONLY valid JSON, no prose.\";\nreturn { json: { _input: input, claudeBody: { model: \"claude-sonnet-4-5\", max_tokens: 1024, messages: [ { role: \"user\", content } ] } } };"
+      },
+      "id": "076af71d-c36f-48f2-9b9f-d40ac330bf6f",
+      "name": "Triage: build prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.claudeBody }}",
+        "options": {}
+      },
+      "id": "ba990c6e-c197-4e66-9027-a0c8b19b0b74",
+      "name": "Triage: ask Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        490,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "Anthropic API (Header Auth: x-api-key)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const txt=($json.content&&$json.content[0]&&$json.content[0].text)||\"\";\nlet data={};\ntry{const m=txt.match(/\\{[\\s\\S]*\\}/);data=m?JSON.parse(m[0]):{};}catch(e){data={};}\nreturn { json: { ...data, _raw: txt, _input: $json._input } };"
+      },
+      "id": "07ebe0ed-3fbc-470a-a34a-a4fe5e2c576c",
+      "name": "Triage: parse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "316ac5a0-8ca7-4567-b3bf-a5ee13b42d96",
+      "name": "→ Log to Sheet (replace)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        960,
+        180
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "c2ebf8e8-d08f-4507-94f7-0b35c650bb23",
+      "name": "→ Human approve, then send (replace)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        960,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "INBOX TRIAGE & DRAFT\n\n1) Replace the Schedule with your email trigger (Gmail/IMAP), or keep it and fetch unread mail.\n2) Set the Anthropic credential.\n3) Swap NoOps for your Sheet + Gmail nodes.\n4) NEVER auto-send: a human approves each draft.",
+        "height": 320,
+        "width": 460,
+        "color": 6
+      },
+      "id": "b1b38d60-53f2-4176-8440-0af9b9385282",
+      "name": "Setup — read me",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        260,
+        560
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Triage: build prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Triage: parse": {
+      "main": [
+        [
+          {
+            "node": "→ Log to Sheet (replace)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "→ Human approve, then send (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "the-ultimate-ai-book"
+  },
+  "tags": []
+}

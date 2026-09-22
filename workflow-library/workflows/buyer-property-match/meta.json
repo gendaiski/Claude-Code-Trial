@@ -1,0 +1,14 @@
+{
+  "title": "Buyer–Property Match",
+  "slug": "buyer-property-match",
+  "description": "Match qualified buyers to new/updated listings and rank by fit.",
+  "category": "Real Estate Brokerage",
+  "tags": [
+    "Real Estate Brokerage",
+    "qualifying-buyers"
+  ],
+  "trigger": "Schedule (daily)",
+  "nodeCount": 7,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/10 Real Estate Brokerage Department/buyer-property-match",
+  "retrievedAt": "2026-09-22T14:56:03.452Z"
+}

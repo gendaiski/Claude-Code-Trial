@@ -1,0 +1,13 @@
+{
+  "title": "Daily Metrics Digest",
+  "slug": "08-daily-metrics-digest",
+  "description": "Pull today's metrics daily and post a plain-English digest with the one thing to watch.",
+  "category": "General",
+  "tags": [],
+  "trigger": "Schedule (daily)",
+  "integrations": "Anthropic API; your metrics source; Slack",
+  "humanGate": "None (read-only digest).",
+  "nodeCount": 7,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/08 Daily Metrics Digest",
+  "retrievedAt": "2026-09-22T14:56:03.444Z"
+}

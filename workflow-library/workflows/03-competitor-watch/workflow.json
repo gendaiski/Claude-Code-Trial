@@ -1,0 +1,231 @@
+{
+  "name": "Competitor Watch",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "7c0592b6-1d53-4898-8aae-ded93b8b9df4",
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://COMPETITOR.example.com/pricing",
+        "options": {}
+      },
+      "id": "e9a18e6c-f760-4640-8e3c-ffcd1455d31f",
+      "name": "Fetch competitor page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const input=$input.item.json;\nconst instruction=\"You are a competitive analyst. Compare the fetched page text to the previous snapshot and summarise material changes (pricing, product, positioning). Ignore cosmetic edits. Return {\\\"changed\\\":\\\"yes|no\\\",\\\"summary\\\":\\\"...\\\",\\\"why_it_matters\\\":\\\"...\\\"}.\";\nconst content=instruction+\"\\n\\nINPUT DATA (JSON):\\n\"+JSON.stringify(input,null,2)+\"\\n\\nReturn ONLY valid JSON, no prose.\";\nreturn { json: { _input: input, claudeBody: { model: \"claude-sonnet-4-5\", max_tokens: 1024, messages: [ { role: \"user\", content } ] } } };"
+      },
+      "id": "de2f7f71-5336-4dba-a0c7-c0e70c5ae9dc",
+      "name": "Analyse: build prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.claudeBody }}",
+        "options": {}
+      },
+      "id": "3547aca8-ebda-43ef-a3ba-ffc1630afed1",
+      "name": "Analyse: ask Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        950,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "Anthropic API (Header Auth: x-api-key)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const txt=($json.content&&$json.content[0]&&$json.content[0].text)||\"\";\nlet data={};\ntry{const m=txt.match(/\\{[\\s\\S]*\\}/);data=m?JSON.parse(m[0]):{};}catch(e){data={};}\nreturn { json: { ...data, _raw: txt, _input: $json._input } };"
+      },
+      "id": "16467b5c-b930-46ec-8588-6d0befeec564",
+      "name": "Analyse: parse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1180,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "92eb5402-bcb2-4702-a722-50424758da9e",
+              "leftValue": "={{ $json.changed }}",
+              "rightValue": "yes",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ]
+        }
+      },
+      "id": "60dbad35-c494-4b79-a558-f634740d2e1b",
+      "name": "IF changed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1420,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "4b30d9cb-0675-41cb-a233-ab555371468f",
+      "name": "→ Post digest to Slack (replace)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        180
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a40f1df5-3960-41af-8198-d853a0a41b22",
+      "name": "→ Store new snapshot (replace)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "COMPETITOR WATCH (daily)\n\n1) Set the competitor URL in 'Fetch competitor page'.\n2) Set the Anthropic credential.\n3) Store snapshots (Sheet/DB) and diff against them — swap the NoOps.\n4) Read-only; never scrape gated/login pages.",
+        "height": 320,
+        "width": 460,
+        "color": 6
+      },
+      "id": "eca62af5-ff11-48c0-a3bd-f1d1b7f29290",
+      "name": "Setup — read me",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        260,
+        560
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Fetch competitor page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch competitor page": {
+      "main": [
+        [
+          {
+            "node": "Analyse: build prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyse: parse": {
+      "main": [
+        [
+          {
+            "node": "IF changed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF changed": {
+      "main": [
+        [
+          {
+            "node": "→ Post digest to Slack (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "→ Store new snapshot (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "the-ultimate-ai-book"
+  },
+  "tags": []
+}

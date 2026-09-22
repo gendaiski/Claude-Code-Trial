@@ -1,0 +1,14 @@
+{
+  "title": "DPIA / Feature Privacy Review",
+  "slug": "dpia-feature-review",
+  "description": "Review a feature's personal-data handling and flag whether a DPIA is triggered.",
+  "category": "Data Protection & Privacy",
+  "tags": [
+    "Legal Department",
+    "reviewing-data-protection"
+  ],
+  "trigger": "Webhook POST /dpia",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/05 Data Protection & Privacy/dpia-feature-review",
+  "retrievedAt": "2026-09-22T14:56:03.469Z"
+}

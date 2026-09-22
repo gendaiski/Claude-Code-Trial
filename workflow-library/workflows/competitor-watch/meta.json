@@ -1,0 +1,14 @@
+{
+  "title": "Competitor Watch",
+  "slug": "competitor-watch",
+  "description": "Scan competitor sources weekly and produce a positioning brief.",
+  "category": "Sales & Growth Department",
+  "tags": [
+    "Sales & Growth Department",
+    "competitive-intelligence"
+  ],
+  "trigger": "Schedule (weekly)",
+  "nodeCount": 7,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/02 Sales & Growth Department/competitor-watch",
+  "retrievedAt": "2026-09-22T14:56:03.406Z"
+}
