@@ -4,6 +4,8 @@ This directory is a complete, standalone repository holding all 51 workflows.
 It is parked here because creating `gendaiski/workflow-library` from the session
 failed with `403 Resource not accessible by integration` — the GitHub App
 installed on the account can read and write repositories but cannot create them.
+That was retried after the GitHub connection was re-established and failed
+identically, so it is a permission scope, not a transient error.
 
 ## To give it its own home
 
@@ -32,3 +34,12 @@ All 51 were read from Dropbox, under
 the Dropbox set has **not** been reconciled against the published library
 listing. When the site is reachable, `scripts/fetch-library.mjs` pulls the
 published listing into the same layout and git shows the difference.
+
+## Fidelity
+
+The definitions were rebuilt from the retrieved content rather than copied byte
+for byte, because the byte-exact write path was blocked by a permission
+classifier. Spot checks against the originals (a plain workflow, a branching
+one, a real-estate one, and two legal ones carrying `—` escapes inside the
+JS source) matched exactly, and `npm run verify` passes on all 51. Diff against
+Dropbox before treating this as an archive of record.

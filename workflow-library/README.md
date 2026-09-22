@@ -53,6 +53,12 @@ In n8n: **Workflows → Import from File → `workflow.json`**. Then:
 Each folder's `README.md` carries the workflow's own Claude prompt and its
 safety note.
 
+`npm run verify` checks, for every workflow, that the definition parses, node
+ids and names are unique, every connection endpoint resolves to a real node,
+there is exactly one Anthropic call still carrying the `REPLACE_ME` credential
+placeholder (and no real key), the workflow ships inactive, and the setup sticky
+is present. CI runs it on every push.
+
 ## Commands
 
 | Command | What it does |
@@ -61,7 +67,9 @@ safety note.
 | `npm run import -- <path>` | Import a flat export: directory, zip, or JSON file |
 | `npm run import:tree -- <path>` | Import a department-organised n8n tree |
 | `npm run catalog` | Rebuild `catalog/index.json` and the table below |
-| `npm run validate` | Fail if the catalog is stale (used in CI) |
+| `npm run verify` | Check every definition is sound and safe to import |
+| `npm run validate` | Fail if the catalog is stale |
+| `npm run check` | Both of the above — what CI runs |
 
 ## Library
 
