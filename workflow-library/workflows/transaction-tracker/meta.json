@@ -1,0 +1,14 @@
+{
+  "title": "Transaction Milestone Tracker",
+  "slug": "transaction-tracker",
+  "description": "Scan live deals daily and flag milestones, documents, and deadlines due.",
+  "category": "Real Estate Brokerage",
+  "tags": [
+    "Real Estate Brokerage",
+    "coordinating-transactions"
+  ],
+  "trigger": "Schedule (daily)",
+  "nodeCount": 7,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/10 Real Estate Brokerage Department/transaction-tracker",
+  "retrievedAt": "2026-09-22T16:18:14.198Z"
+}

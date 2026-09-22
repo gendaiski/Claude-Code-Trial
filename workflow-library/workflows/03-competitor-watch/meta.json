@@ -1,0 +1,13 @@
+{
+  "title": "Competitor Watch",
+  "slug": "03-competitor-watch",
+  "description": "Fetch a competitor page daily, detect material changes, and post a digest.",
+  "category": "General",
+  "tags": [],
+  "trigger": "Schedule (daily)",
+  "integrations": "Anthropic API; Slack; a store for snapshots",
+  "humanGate": "None (read-only digest).",
+  "nodeCount": 9,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/03 Competitor Watch",
+  "retrievedAt": "2026-09-22T16:18:14.151Z"
+}

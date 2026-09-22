@@ -1,0 +1,15 @@
+{
+  "title": "Legal Research Brief",
+  "slug": "legal-research-brief",
+  "description": "Produce a memo-style research brief from provided sources only.",
+  "category": "Litigation & Disputes",
+  "tags": [
+    "Legal Department",
+    "drafting-legal-memos",
+    "researching-markets"
+  ],
+  "trigger": "Webhook POST /legal-research",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/06 Litigation & Disputes/legal-research-brief",
+  "retrievedAt": "2026-09-22T16:18:14.211Z"
+}

@@ -1,0 +1,21 @@
+name: catalog
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Definitions are sound
+        run: npm run verify
+      - name: Definitions match their source
+        run: npm run checksums
+      - name: Catalog matches workflows/
+        run: npm run validate

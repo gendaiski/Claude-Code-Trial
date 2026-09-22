@@ -1,0 +1,14 @@
+{
+  "title": "KYC / AML & Sanctions Screen",
+  "slug": "kyc-aml-screen",
+  "description": "Screen the parties to a deal and check regime fit before an offer proceeds.",
+  "category": "Real Estate Brokerage",
+  "tags": [
+    "Real Estate Brokerage",
+    "checking-realestate-compliance"
+  ],
+  "trigger": "Webhook POST /re-kyc",
+  "nodeCount": 8,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/10 Real Estate Brokerage Department/kyc-aml-screen",
+  "retrievedAt": "2026-09-22T16:18:14.183Z"
+}

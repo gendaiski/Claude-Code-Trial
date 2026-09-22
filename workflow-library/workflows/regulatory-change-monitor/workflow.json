@@ -1,0 +1,198 @@
+{
+  "name": "Regulatory Change Monitor",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "6bdb5959-f035-422f-81d4-66bd84e8a1fa",
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://YOUR-REGULATOR-FEED/latest",
+        "options": {}
+      },
+      "id": "ea0d8f4a-5ca7-426f-9319-f0a4cfed7317",
+      "name": "Fetch regulator feed (replace)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const input=$input.item.json;\nconst instruction=\"From these fetched regulator/guidance items, identify changes relevant to our products and jurisdictions (edit these here). For each, give the impact and the action required. Return {\\\"relevant\\\":[{\\\"change\\\":\\\"...\\\",\\\"area\\\":\\\"...\\\",\\\"impact\\\":\\\"...\\\",\\\"action\\\":\\\"...\\\",\\\"owner\\\":\\\"...\\\"}]}. Drafting support, not legal advice \\u2014 a qualified lawyer reviews and signs; the workflow never sends, files, or executes anything; grounded steps use only provided sources; escalate contentious or high-value matters to counsel.\";\nconst content=instruction+\"\\n\\nINPUT DATA (JSON):\\n\"+JSON.stringify(input,null,2)+\"\\n\\nReturn ONLY valid JSON, no prose.\";\nreturn { json: { _input: input, claudeBody: { model: \"claude-sonnet-4-5\", max_tokens: 1200, messages: [ { role: \"user\", content } ] } } };"
+      },
+      "id": "e9873c1a-d56c-45b4-83ef-9343fbf5db39",
+      "name": "Assess: build prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.claudeBody }}",
+        "options": {}
+      },
+      "id": "e0dc5cbb-8bc2-4f4b-945b-8e5158a22462",
+      "name": "Assess: ask Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        750,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "Anthropic API (Header Auth: x-api-key)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const txt=($json.content&&$json.content[0]&&$json.content[0].text)||\"\";\nlet data={};\ntry{const m=txt.match(/\\{[\\s\\S]*\\}/);data=m?JSON.parse(m[0]):{};}catch(e){data={};}\nreturn { json: { ...data, _raw: txt, _input: $json._input } };"
+      },
+      "id": "b239c4d5-01e0-4a12-8e4c-04efa9e01954",
+      "name": "Assess: parse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        980,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "2be63f16-1eb5-47bb-9ddf-7c90b93d5d4a",
+      "name": "→ Alert owner + update register (replace)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "REGULATORY CHANGE MONITOR (daily)\n\n1) Point 'Fetch regulator feed' at your tracked sources.\n2) Set the Anthropic credential; list your products/jurisdictions in the prompt.\n3) Swap the NoOp for your notify + register nodes.\n4) Flag for human judgment; never assert a regulator's position.",
+        "height": 340,
+        "width": 470,
+        "color": 6
+      },
+      "id": "454dabef-49b3-4f94-984c-d2bad9c4c9f9",
+      "name": "Setup — read me",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        520,
+        560
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Fetch regulator feed (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch regulator feed (replace)": {
+      "main": [
+        [
+          {
+            "node": "Assess: build prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess: build prompt": {
+      "main": [
+        [
+          {
+            "node": "Assess: ask Claude",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess: ask Claude": {
+      "main": [
+        [
+          {
+            "node": "Assess: parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess: parse": {
+      "main": [
+        [
+          {
+            "node": "→ Alert owner + update register (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "the-ultimate-ai-book"
+  },
+  "tags": [
+    {
+      "name": "Legal Department"
+    }
+  ]
+}

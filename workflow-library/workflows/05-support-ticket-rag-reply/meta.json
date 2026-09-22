@@ -1,0 +1,13 @@
+{
+  "title": "Support Ticket — RAG Reply",
+  "slug": "05-support-ticket-rag-reply",
+  "description": "Classify a support ticket, retrieve KB context, draft a grounded reply or escalate.",
+  "category": "General",
+  "tags": [],
+  "trigger": "Webhook POST /ticket",
+  "integrations": "Anthropic API; a RAG/search endpoint; helpdesk",
+  "humanGate": "Human sends replies until trusted; humans handle escalations.",
+  "nodeCount": 9,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/05 Support Ticket RAG Reply",
+  "retrievedAt": "2026-09-22T16:18:14.160Z"
+}

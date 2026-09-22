@@ -1,0 +1,227 @@
+{
+  "name": "Support Ticket — RAG Reply",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ticket",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "307fe258-ee13-4532-b138-a87fbad6a11d",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://YOUR-RAG-ENDPOINT/search",
+        "options": {}
+      },
+      "id": "089ca964-e343-4250-81b8-3ebadc23fd8e",
+      "name": "Retrieve KB context (replace)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const input=$input.item.json;\nconst instruction=\"You are a support agent. Using ONLY the knowledge-base context provided, classify the ticket (billing|bug|how-to|escalation), and draft a reply that cites the source. If the context does not answer it, set escalate=yes. Return {\\\"category\\\":\\\"...\\\",\\\"escalate\\\":\\\"yes|no\\\",\\\"draft_reply\\\":\\\"...\\\",\\\"citation\\\":\\\"...\\\"}.\";\nconst content=instruction+\"\\n\\nINPUT DATA (JSON):\\n\"+JSON.stringify(input,null,2)+\"\\n\\nReturn ONLY valid JSON, no prose.\";\nreturn { json: { _input: input, claudeBody: { model: \"claude-sonnet-4-5\", max_tokens: 1024, messages: [ { role: \"user\", content } ] } } };"
+      },
+      "id": "b4b44c5f-4bf0-4772-a510-feb84e887d14",
+      "name": "Answer: build prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.claudeBody }}",
+        "options": {}
+      },
+      "id": "795795f5-8348-436c-a9e3-0eec59e2202b",
+      "name": "Answer: ask Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        950,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "Anthropic API (Header Auth: x-api-key)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const txt=($json.content&&$json.content[0]&&$json.content[0].text)||\"\";\nlet data={};\ntry{const m=txt.match(/\\{[\\s\\S]*\\}/);data=m?JSON.parse(m[0]):{};}catch(e){data={};}\nreturn { json: { ...data, _raw: txt, _input: $json._input } };"
+      },
+      "id": "47065a18-77bc-439e-91ff-6ac7a036088d",
+      "name": "Answer: parse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1180,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "387671ee-d10d-41d0-b0f0-defafb1b4daf",
+              "leftValue": "={{ $json.escalate }}",
+              "rightValue": "yes",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ]
+        }
+      },
+      "id": "bd9de1ac-f079-4885-8ba6-0eee6c322545",
+      "name": "IF escalate",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1420,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "c2b2a1a8-55be-405d-b035-f288cda6d748",
+      "name": "→ Route to human with summary (replace)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        180
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "eacad601-a00e-409d-b4b4-8c6b59b91509",
+      "name": "→ Draft reply for review (replace)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "SUPPORT TICKET — RAG REPLY\n\n1) Point 'Retrieve KB context' at your RAG/search endpoint (or vector DB).\n2) Set the Anthropic credential.\n3) Swap NoOps for your helpdesk + Slack nodes.\n4) Grounded only: if unsupported, it escalates. Human sends until trusted.",
+        "height": 320,
+        "width": 460,
+        "color": 6
+      },
+      "id": "8de70645-587d-48cc-bee3-ec776dd3b4b2",
+      "name": "Setup — read me",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        260,
+        560
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Retrieve KB context (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve KB context (replace)": {
+      "main": [
+        [
+          {
+            "node": "Answer: build prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer: parse": {
+      "main": [
+        [
+          {
+            "node": "IF escalate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF escalate": {
+      "main": [
+        [
+          {
+            "node": "→ Route to human with summary (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "→ Draft reply for review (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "the-ultimate-ai-book"
+  },
+  "tags": []
+}

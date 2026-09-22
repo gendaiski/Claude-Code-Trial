@@ -1,0 +1,172 @@
+{
+  "name": "Daily Metrics Digest",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "147d8dba-fd0e-46e0-8c4a-9411acb08b10",
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://YOUR-METRICS/today",
+        "options": {}
+      },
+      "id": "73cad73a-05cb-4b08-97d1-325a3edcd06a",
+      "name": "Get metrics (Sheet/DB/API) (replace)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const input=$input.item.json;\nconst instruction=\"You are an analytics assistant. From today's metrics, write a short plain-English digest: the headline numbers, what changed vs yesterday, and the one thing to watch. Return {\\\"digest\\\":\\\"...\\\",\\\"watch\\\":\\\"...\\\"}.\";\nconst content=instruction+\"\\n\\nINPUT DATA (JSON):\\n\"+JSON.stringify(input,null,2)+\"\\n\\nReturn ONLY valid JSON, no prose.\";\nreturn { json: { _input: input, claudeBody: { model: \"claude-sonnet-4-5\", max_tokens: 1024, messages: [ { role: \"user\", content } ] } } };"
+      },
+      "id": "19b95060-6156-4764-88b7-e0d7bf6a168c",
+      "name": "Summarise: build prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.claudeBody }}",
+        "options": {}
+      },
+      "id": "56d76569-cc10-42c1-8db7-947557cdce63",
+      "name": "Summarise: ask Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        950,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "Anthropic API (Header Auth: x-api-key)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const txt=($json.content&&$json.content[0]&&$json.content[0].text)||\"\";\nlet data={};\ntry{const m=txt.match(/\\{[\\s\\S]*\\}/);data=m?JSON.parse(m[0]):{};}catch(e){data={};}\nreturn { json: { ...data, _raw: txt, _input: $json._input } };"
+      },
+      "id": "400bee9b-d7e1-409e-ac73-482a9407e79f",
+      "name": "Summarise: parse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1180,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "78ab9b3d-6d41-4163-b79d-e7e4793da7bb",
+      "name": "→ Send digest to Slack (replace)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1420,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "DAILY METRICS DIGEST\n\n1) Point 'Get metrics' at your data (Google Sheets node, DB, or API).\n2) Set the Anthropic credential.\n3) Swap the NoOp for your Slack/Email node.\n4) Verify numbers — the AI summarises, it doesn't compute the source data.",
+        "height": 320,
+        "width": 460,
+        "color": 6
+      },
+      "id": "97cf1e4d-4af4-4665-a746-001b4da937bb",
+      "name": "Setup — read me",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        260,
+        540
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Get metrics (Sheet/DB/API) (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get metrics (Sheet/DB/API) (replace)": {
+      "main": [
+        [
+          {
+            "node": "Summarise: build prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarise: parse": {
+      "main": [
+        [
+          {
+            "node": "→ Send digest to Slack (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "the-ultimate-ai-book"
+  },
+  "tags": []
+}

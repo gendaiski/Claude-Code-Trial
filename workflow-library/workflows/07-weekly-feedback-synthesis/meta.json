@@ -1,0 +1,13 @@
+{
+  "title": "Weekly Feedback Synthesis",
+  "slug": "07-weekly-feedback-synthesis",
+  "description": "Pull customer feedback weekly and synthesise ranked themes with evidence.",
+  "category": "General",
+  "tags": [],
+  "trigger": "Schedule (weekly)",
+  "integrations": "Anthropic API; feedback sources; Slack/Docs",
+  "humanGate": "None (read-only brief).",
+  "nodeCount": 7,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/07 Weekly Feedback Synthesis",
+  "retrievedAt": "2026-09-22T16:18:14.169Z"
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Content Brief → Draft",
+  "slug": "content-brief-to-draft",
+  "description": "Turn a content brief into a researched, on-brand first draft for approval.",
+  "category": "Marketing & Content Department",
+  "tags": [
+    "Marketing & Content Department",
+    "content-ops-manager",
+    "editing-prose"
+  ],
+  "trigger": "Webhook POST /content-brief",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/01 Marketing & Content Department/content-brief-to-draft",
+  "retrievedAt": "2026-09-22T16:18:14.140Z"
+}

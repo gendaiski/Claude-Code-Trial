@@ -1,0 +1,184 @@
+{
+  "name": "Legal Intake Router",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "legal-intake",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "2f55a5a2-679f-4d49-9dc8-3fb579e89ab2",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const input=$input.item.json;\nconst instruction=\"You are the legal front door. Classify the request into a team: contracts|nda|compliance|data-protection|litigation|ip|other. Extract the ask, urgency, and any deadline. Return {\\\"team\\\":\\\"...\\\",\\\"ask\\\":\\\"...\\\",\\\"urgency\\\":\\\"low|med|high\\\",\\\"deadline\\\":\\\"...\\\"}. Drafting support, not legal advice \\u2014 a qualified lawyer reviews and signs; the workflow never sends, files, or executes anything; grounded steps use only provided sources; escalate contentious or high-value matters to counsel.\";\nconst content=instruction+\"\\n\\nINPUT DATA (JSON):\\n\"+JSON.stringify(input,null,2)+\"\\n\\nReturn ONLY valid JSON, no prose.\";\nreturn { json: { _input: input, claudeBody: { model: \"claude-sonnet-4-5\", max_tokens: 1200, messages: [ { role: \"user\", content } ] } } };"
+      },
+      "id": "3f4d0080-d092-482f-81fd-a40429111670",
+      "name": "Assess: build prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.claudeBody }}",
+        "options": {}
+      },
+      "id": "b6ce080a-1f56-46f6-a0e6-0cd62b7798c1",
+      "name": "Assess: ask Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        490,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "Anthropic API (Header Auth: x-api-key)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const txt=($json.content&&$json.content[0]&&$json.content[0].text)||\"\";\nlet data={};\ntry{const m=txt.match(/\\{[\\s\\S]*\\}/);data=m?JSON.parse(m[0]):{};}catch(e){data={};}\nreturn { json: { ...data, _raw: txt, _input: $json._input } };"
+      },
+      "id": "4d25ab08-889e-43d8-88db-e25fcb4479b8",
+      "name": "Assess: parse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "ec0662ac-b336-4c9c-b2d6-e659c8c3b113",
+      "name": "→ Route to team queue (replace)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        960,
+        180
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "30eae42e-c63d-4d65-8faf-f397011ef62c",
+      "name": "→ Acknowledge requester (replace)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        960,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "LEGAL INTAKE ROUTER\n\n1) POST requests to /legal-intake.\n2) Set the Anthropic credential.\n3) Swap NoOps for your ticketing/email nodes.\n4) Front door only — humans own the work.",
+        "height": 340,
+        "width": 470,
+        "color": 6
+      },
+      "id": "46a59ec9-8ebf-4d06-be3e-7c2b3046992d",
+      "name": "Setup — read me",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        260,
+        560
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Assess: build prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess: build prompt": {
+      "main": [
+        [
+          {
+            "node": "Assess: ask Claude",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess: ask Claude": {
+      "main": [
+        [
+          {
+            "node": "Assess: parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess: parse": {
+      "main": [
+        [
+          {
+            "node": "→ Route to team queue (replace)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "→ Acknowledge requester (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "the-ultimate-ai-book"
+  },
+  "tags": [
+    {
+      "name": "Legal Department"
+    }
+  ]
+}

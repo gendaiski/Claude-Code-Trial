@@ -1,0 +1,14 @@
+{
+  "title": "Contract Renewal & Obligation Watch",
+  "slug": "contract-renewal-watch",
+  "description": "Scan the contract register daily and flag renewals, expiries, and surviving obligations.",
+  "category": "Contracts Team",
+  "tags": [
+    "Legal Department",
+    "reviewing-commercial-contracts"
+  ],
+  "trigger": "Schedule (daily)",
+  "nodeCount": 7,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/02 Contracts Team/contract-renewal-watch",
+  "retrievedAt": "2026-09-22T16:18:14.203Z"
+}

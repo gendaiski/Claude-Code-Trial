@@ -1,0 +1,227 @@
+{
+  "name": "Lead Qualify & Route",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "2e77f4f5-0326-479e-affc-4c94d08ef170",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const input=$input.item.json;\nconst instruction=\"Score this lead against our ICP (edit the ICP here). Return {\\\"fit\\\":\\\"A|B|C\\\",\\\"reasons\\\":[\\\"...\\\"],\\\"next_step\\\":\\\"...\\\",\\\"route\\\":\\\"sales|nurture|disqualify\\\"}. A human reviews and approves before anything is sent, posted, paid, published, or executed; grounded steps use only provided sources; the workflow drafts and routes, it does not act autonomously.\";\nconst content=instruction+\"\\n\\nINPUT DATA (JSON):\\n\"+JSON.stringify(input,null,2)+\"\\n\\nReturn ONLY valid JSON, no prose.\";\nreturn { json: { _input: input, claudeBody: { model: \"claude-sonnet-4-5\", max_tokens: 1200, messages: [ { role: \"user\", content } ] } } };"
+      },
+      "id": "8d4bb5b1-ec19-45f6-b68f-3d4df5b00627",
+      "name": "Assess: build prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.claudeBody }}",
+        "options": {}
+      },
+      "id": "23106f7b-bb48-4dec-ad5e-c36ccc876db7",
+      "name": "Assess: ask Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        490,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "Anthropic API (Header Auth: x-api-key)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const txt=($json.content&&$json.content[0]&&$json.content[0].text)||\"\";\nlet data={};\ntry{const m=txt.match(/\\{[\\s\\S]*\\}/);data=m?JSON.parse(m[0]):{};}catch(e){data={};}\nreturn { json: { ...data, _raw: txt, _input: $json._input } };"
+      },
+      "id": "74024c75-c532-4e21-beaf-2c573c9602f4",
+      "name": "Assess: parse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "f385cbc5-acc7-4141-86be-fd31bba13e40",
+              "leftValue": "={{ $json.route }}",
+              "rightValue": "sales",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ]
+        }
+      },
+      "id": "e98497ea-abcb-4a63-9c4e-069a571dd9f5",
+      "name": "IF sales",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        960,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "de734544-5c69-4628-a87c-df789f91619c",
+      "name": "→ Notify sales + create deal (replace)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        180
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "3b5e772c-066d-4e45-8456-44abe51120ce",
+      "name": "→ Add to nurture (replace)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "LEAD QUALIFY & ROUTE\n\n1) POST the lead to /lead.\n2) Set the Anthropic credential; edit the ICP in the prompt.\n3) Swap the NoOps for your CRM/email nodes.\n4) A human owns outreach.",
+        "height": 320,
+        "width": 470,
+        "color": 6
+      },
+      "id": "ad822d30-6461-4940-9e62-77a8ca4a7a3e",
+      "name": "Setup — read me",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        260,
+        560
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Assess: build prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess: build prompt": {
+      "main": [
+        [
+          {
+            "node": "Assess: ask Claude",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess: ask Claude": {
+      "main": [
+        [
+          {
+            "node": "Assess: parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess: parse": {
+      "main": [
+        [
+          {
+            "node": "IF sales",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF sales": {
+      "main": [
+        [
+          {
+            "node": "→ Notify sales + create deal (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "→ Add to nurture (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "the-ultimate-ai-book"
+  },
+  "tags": [
+    {
+      "name": "Sales & Growth Department"
+    }
+  ]
+}

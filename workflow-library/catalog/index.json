@@ -1,0 +1,710 @@
+{
+  "generatedAt": "2026-09-22T16:35:41.255Z",
+  "count": 51,
+  "workflows": [
+    {
+      "slug": "01-lead-qualify-and-route",
+      "title": "Lead Qualify & Route",
+      "description": "Qualify an inbound lead against your ICP; route good fits to the CRM + rep, archive the rest.",
+      "category": "General",
+      "tags": [],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/01 Lead Qualify and Route",
+      "path": "workflows/01-lead-qualify-and-route",
+      "hasDefinition": true,
+      "nodeCount": 8
+    },
+    {
+      "slug": "02-inbox-triage-and-draft",
+      "title": "Inbox Triage & Draft",
+      "description": "Triage inbound email, extract the ask, and draft a reply in your voice for approval.",
+      "category": "General",
+      "tags": [],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/02 Inbox Triage and Draft",
+      "path": "workflows/02-inbox-triage-and-draft",
+      "hasDefinition": true,
+      "nodeCount": 7
+    },
+    {
+      "slug": "03-competitor-watch",
+      "title": "Competitor Watch",
+      "description": "Fetch a competitor page daily, detect material changes, and post a digest.",
+      "category": "General",
+      "tags": [],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/03 Competitor Watch",
+      "path": "workflows/03-competitor-watch",
+      "hasDefinition": true,
+      "nodeCount": 9
+    },
+    {
+      "slug": "04-content-draft-and-approve",
+      "title": "Content Draft & Approve",
+      "description": "Turn a brief into a draft, carousel outline, and social post for editor approval.",
+      "category": "General",
+      "tags": [],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/04 Content Draft and Approve",
+      "path": "workflows/04-content-draft-and-approve",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "05-support-ticket-rag-reply",
+      "title": "Support Ticket — RAG Reply",
+      "description": "Classify a support ticket, retrieve KB context, draft a grounded reply or escalate.",
+      "category": "General",
+      "tags": [],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/05 Support Ticket RAG Reply",
+      "path": "workflows/05-support-ticket-rag-reply",
+      "hasDefinition": true,
+      "nodeCount": 9
+    },
+    {
+      "slug": "06-contract-intake-and-route",
+      "title": "Contract Intake & Route",
+      "description": "Classify an inbound contract, flag top risks, and route by GREEN/YELLOW/RED to counsel.",
+      "category": "General",
+      "tags": [],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/06 Contract Intake and Route",
+      "path": "workflows/06-contract-intake-and-route",
+      "hasDefinition": true,
+      "nodeCount": 8
+    },
+    {
+      "slug": "07-weekly-feedback-synthesis",
+      "title": "Weekly Feedback Synthesis",
+      "description": "Pull customer feedback weekly and synthesise ranked themes with evidence.",
+      "category": "General",
+      "tags": [],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/07 Weekly Feedback Synthesis",
+      "path": "workflows/07-weekly-feedback-synthesis",
+      "hasDefinition": true,
+      "nodeCount": 7
+    },
+    {
+      "slug": "08-daily-metrics-digest",
+      "title": "Daily Metrics Digest",
+      "description": "Pull today's metrics daily and post a plain-English digest with the one thing to watch.",
+      "category": "General",
+      "tags": [],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/08 Daily Metrics Digest",
+      "path": "workflows/08-daily-metrics-digest",
+      "hasDefinition": true,
+      "nodeCount": 7
+    },
+    {
+      "slug": "budget-variance-alert",
+      "title": "Budget Variance Alert",
+      "description": "Scan actuals weekly and flag material budget variances.",
+      "category": "Finance & Reporting Department",
+      "tags": [
+        "Finance & Reporting Department",
+        "budgeting-and-forecasting"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/05 Finance & Reporting Department/budget-variance-alert",
+      "path": "workflows/budget-variance-alert",
+      "hasDefinition": true,
+      "nodeCount": 7
+    },
+    {
+      "slug": "buyer-property-match",
+      "title": "Buyer–Property Match",
+      "description": "Match qualified buyers to new/updated listings and rank by fit.",
+      "category": "Real Estate Brokerage",
+      "tags": [
+        "Real Estate Brokerage",
+        "qualifying-buyers"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/10 Real Estate Brokerage Department/buyer-property-match",
+      "path": "workflows/buyer-property-match",
+      "hasDefinition": true,
+      "nodeCount": 7
+    },
+    {
+      "slug": "competitor-watch",
+      "title": "Competitor Watch",
+      "description": "Scan competitor sources weekly and produce a positioning brief.",
+      "category": "Sales & Growth Department",
+      "tags": [
+        "Sales & Growth Department",
+        "competitive-intelligence"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/02 Sales & Growth Department/competitor-watch",
+      "path": "workflows/competitor-watch",
+      "hasDefinition": true,
+      "nodeCount": 7
+    },
+    {
+      "slug": "compliance-check",
+      "title": "Compliance Check",
+      "description": "Run a compliance check on a proposed action and decide proceed / conditions / escalate.",
+      "category": "Compliance & Regulatory",
+      "tags": [
+        "Legal Department",
+        "checking-compliance"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/04 Compliance & Regulatory/compliance-check",
+      "path": "workflows/compliance-check",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "content-brief-to-draft",
+      "title": "Content Brief → Draft",
+      "description": "Turn a content brief into a researched, on-brand first draft for approval.",
+      "category": "Marketing & Content Department",
+      "tags": [
+        "Marketing & Content Department",
+        "content-ops-manager",
+        "editing-prose"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/01 Marketing & Content Department/content-brief-to-draft",
+      "path": "workflows/content-brief-to-draft",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "contract-intake-triage",
+      "title": "Contract Intake & Triage",
+      "description": "Detect contract type and parties, flag risk, and route GREEN/YELLOW/RED.",
+      "category": "Contracts Team",
+      "tags": [
+        "Legal Department",
+        "intaking-contracts",
+        "reviewing-commercial-contracts"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/02 Contracts Team/contract-intake-triage",
+      "path": "workflows/contract-intake-triage",
+      "hasDefinition": true,
+      "nodeCount": 8
+    },
+    {
+      "slug": "contract-renewal-watch",
+      "title": "Contract Renewal & Obligation Watch",
+      "description": "Scan the contract register daily and flag renewals, expiries, and surviving obligations.",
+      "category": "Contracts Team",
+      "tags": [
+        "Legal Department",
+        "reviewing-commercial-contracts"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/02 Contracts Team/contract-renewal-watch",
+      "path": "workflows/contract-renewal-watch",
+      "hasDefinition": true,
+      "nodeCount": 7
+    },
+    {
+      "slug": "contract-review-redlines",
+      "title": "Contract Review & Redlines",
+      "description": "Review a contract against the playbook and propose clause-by-clause redlines.",
+      "category": "Contracts Team",
+      "tags": [
+        "Legal Department",
+        "reviewing-commercial-contracts",
+        "drafting-legal-memos"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/02 Contracts Team/contract-review-redlines",
+      "path": "workflows/contract-review-redlines",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "counterparty-screen",
+      "title": "Counterparty & Sanctions Screen",
+      "description": "Screen a counterparty and summarise risk for review.",
+      "category": "Trade & Commodities Department",
+      "tags": [
+        "Trade & Commodities Department",
+        "compliance-monitoring"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/06 Trade & Commodities Department/counterparty-screen",
+      "path": "workflows/counterparty-screen",
+      "hasDefinition": true,
+      "nodeCount": 8
+    },
+    {
+      "slug": "cv-screen-score",
+      "title": "CV Screening & Scoring",
+      "description": "Score a CV against a role and produce an interview kit.",
+      "category": "People & Hiring Department",
+      "tags": [
+        "People & Hiring Department",
+        "screening-candidates"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/07 People & Hiring Department/cv-screen-score",
+      "path": "workflows/cv-screen-score",
+      "hasDefinition": true,
+      "nodeCount": 8
+    },
+    {
+      "slug": "deal-intake-grade",
+      "title": "Deal Intake & Routing",
+      "description": "Classify an incoming deal, note grade/spec, and route it.",
+      "category": "Trade & Commodities Department",
+      "tags": [
+        "Trade & Commodities Department",
+        "trade-ops-manager",
+        "classifying-egyptian-cotton",
+        "appraising-gemstones"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/06 Trade & Commodities Department/deal-intake-grade",
+      "path": "workflows/deal-intake-grade",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "dpia-feature-review",
+      "title": "DPIA / Feature Privacy Review",
+      "description": "Review a feature's personal-data handling and flag whether a DPIA is triggered.",
+      "category": "Data Protection & Privacy",
+      "tags": [
+        "Legal Department",
+        "reviewing-data-protection"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/05 Data Protection & Privacy/dpia-feature-review",
+      "path": "workflows/dpia-feature-review",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "dsar-intake-triage",
+      "title": "DSAR Intake & Triage",
+      "description": "Triage a data-subject request, set the statutory clock, and open the case.",
+      "category": "Data Protection & Privacy",
+      "tags": [
+        "Legal Department",
+        "reviewing-data-protection"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/05 Data Protection & Privacy/dsar-intake-triage",
+      "path": "workflows/dsar-intake-triage",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "feedback-synthesis",
+      "title": "Weekly Feedback Synthesis",
+      "description": "Turn the week's tickets and reviews into a voice-of-customer brief.",
+      "category": "Customer Support Department",
+      "tags": [
+        "Customer Support Department",
+        "customer-feedback-synthesis"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/03 Customer Support Department/feedback-synthesis",
+      "path": "workflows/feedback-synthesis",
+      "hasDefinition": true,
+      "nodeCount": 7
+    },
+    {
+      "slug": "inbox-triage-draft",
+      "title": "Inbox Triage & Draft",
+      "description": "Triage an incoming email, classify it, and draft a reply.",
+      "category": "Operations & Knowledge Department",
+      "tags": [
+        "Operations & Knowledge Department",
+        "orchestrating-agents (Ops)"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/09 Operations & Knowledge Department/inbox-triage-draft",
+      "path": "workflows/inbox-triage-draft",
+      "hasDefinition": true,
+      "nodeCount": 8
+    },
+    {
+      "slug": "ip-intake-triage",
+      "title": "IP Intake & Triage",
+      "description": "Classify an IP matter, flag deadlines and priorities, and route.",
+      "category": "Intellectual Property",
+      "tags": [
+        "Legal Department",
+        "drafting-legal-memos"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/07 Intellectual Property/ip-intake-triage",
+      "path": "workflows/ip-intake-triage",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "issue-to-fix-pr",
+      "title": "Issue → Fix Plan",
+      "description": "Turn a bug/issue into a plan and a proposed patch summary.",
+      "category": "Engineering & Product Department",
+      "tags": [
+        "Engineering & Product Department",
+        "designing-systems",
+        "writing-tests"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/08 Engineering & Product Department/issue-to-fix-pr",
+      "path": "workflows/issue-to-fix-pr",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "jd-draft",
+      "title": "Job Description Draft",
+      "description": "Turn a role brief into a clear, inclusive job description.",
+      "category": "People & Hiring Department",
+      "tags": [
+        "People & Hiring Department",
+        "writing-job-descriptions"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/07 People & Hiring Department/jd-draft",
+      "path": "workflows/jd-draft",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "kb-sync",
+      "title": "Knowledge Base Sync",
+      "description": "Summarise new documents into the knowledge base daily.",
+      "category": "Operations & Knowledge Department",
+      "tags": [
+        "Operations & Knowledge Department",
+        "the-ai-second-brain"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/09 Operations & Knowledge Department/kb-sync",
+      "path": "workflows/kb-sync",
+      "hasDefinition": true,
+      "nodeCount": 7
+    },
+    {
+      "slug": "kyc-aml-screen",
+      "title": "KYC / AML & Sanctions Screen",
+      "description": "Screen the parties to a deal and check regime fit before an offer proceeds.",
+      "category": "Real Estate Brokerage",
+      "tags": [
+        "Real Estate Brokerage",
+        "checking-realestate-compliance"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/10 Real Estate Brokerage Department/kyc-aml-screen",
+      "path": "workflows/kyc-aml-screen",
+      "hasDefinition": true,
+      "nodeCount": 8
+    },
+    {
+      "slug": "lead-capture-qualify",
+      "title": "Lead Capture & Qualify",
+      "description": "Qualify an inbound buyer lead against budget/financing/intent and route it.",
+      "category": "Real Estate Brokerage",
+      "tags": [
+        "Real Estate Brokerage",
+        "qualifying-buyers",
+        "real-estate-ops-manager"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/10 Real Estate Brokerage Department/lead-capture-qualify",
+      "path": "workflows/lead-capture-qualify",
+      "hasDefinition": true,
+      "nodeCount": 8
+    },
+    {
+      "slug": "lead-qualify-route",
+      "title": "Lead Qualify & Route",
+      "description": "Enrich and score an inbound lead against the ICP, then route it.",
+      "category": "Sales & Growth Department",
+      "tags": [
+        "Sales & Growth Department",
+        "researching-markets",
+        "growth-manager"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/02 Sales & Growth Department/lead-qualify-route",
+      "path": "workflows/lead-qualify-route",
+      "hasDefinition": true,
+      "nodeCount": 8
+    },
+    {
+      "slug": "legal-intake-router",
+      "title": "Legal Intake Router",
+      "description": "Classify any inbound legal request and route it to the right team.",
+      "category": "Intake & Routing",
+      "tags": [
+        "Legal Department",
+        "legal-ops-manager"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/01 Intake & Routing/legal-intake-router",
+      "path": "workflows/legal-intake-router",
+      "hasDefinition": true,
+      "nodeCount": 7
+    },
+    {
+      "slug": "legal-research-brief",
+      "title": "Legal Research Brief",
+      "description": "Produce a memo-style research brief from provided sources only.",
+      "category": "Litigation & Disputes",
+      "tags": [
+        "Legal Department",
+        "drafting-legal-memos",
+        "researching-markets"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/06 Litigation & Disputes/legal-research-brief",
+      "path": "workflows/legal-research-brief",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "listing-intake",
+      "title": "Listing Intake & Verify",
+      "description": "Capture a new listing, normalise details, and flag title/disclosure gaps.",
+      "category": "Real Estate Brokerage",
+      "tags": [
+        "Real Estate Brokerage",
+        "intaking-listings",
+        "checking-realestate-compliance"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/10 Real Estate Brokerage Department/listing-intake",
+      "path": "workflows/listing-intake",
+      "hasDefinition": true,
+      "nodeCount": 8
+    },
+    {
+      "slug": "litigation-hold-notice",
+      "title": "Litigation Hold Notice",
+      "description": "Draft a litigation hold notice with custodians and sources to preserve.",
+      "category": "Litigation & Disputes",
+      "tags": [
+        "Legal Department",
+        "drafting-legal-memos"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/06 Litigation & Disputes/litigation-hold-notice",
+      "path": "workflows/litigation-hold-notice",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "metrics-digest",
+      "title": "Daily Metrics Digest",
+      "description": "Pull the day's metrics and write a plain-English digest.",
+      "category": "Finance & Reporting Department",
+      "tags": [
+        "Finance & Reporting Department",
+        "reporting-manager"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/05 Finance & Reporting Department/metrics-digest",
+      "path": "workflows/metrics-digest",
+      "hasDefinition": true,
+      "nodeCount": 7
+    },
+    {
+      "slug": "month-close-report",
+      "title": "Monthly Close Report",
+      "description": "Turn close data into a board-ready draft with variance narrative.",
+      "category": "Finance & Reporting Department",
+      "tags": [
+        "Finance & Reporting Department",
+        "monthly-financial-reporting",
+        "budgeting-and-forecasting"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/05 Finance & Reporting Department/month-close-report",
+      "path": "workflows/month-close-report",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "nda-triage",
+      "title": "NDA Triage",
+      "description": "Triage an NDA GREEN/YELLOW/RED and draft a counter-position.",
+      "category": "NDA Fast-Track",
+      "tags": [
+        "Legal Department",
+        "triaging-ndas"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/03 NDA Fast-Track/nda-triage",
+      "path": "workflows/nda-triage",
+      "hasDefinition": true,
+      "nodeCount": 8
+    },
+    {
+      "slug": "offer-negotiation",
+      "title": "Offer & Negotiation Summary",
+      "description": "Summarise an offer, compare to valuation, and draft counter options.",
+      "category": "Real Estate Brokerage",
+      "tags": [
+        "Real Estate Brokerage",
+        "negotiating-offers"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/10 Real Estate Brokerage Department/offer-negotiation",
+      "path": "workflows/offer-negotiation",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "outbound-sequence",
+      "title": "Outbound Sequence Draft",
+      "description": "Draft a personalised, multi-touch outreach sequence for a prospect.",
+      "category": "Sales & Growth Department",
+      "tags": [
+        "Sales & Growth Department",
+        "outbound-sales"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/02 Sales & Growth Department/outbound-sequence",
+      "path": "workflows/outbound-sequence",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "pr-code-review",
+      "title": "PR Code Review",
+      "description": "Review a pull-request diff and post structured review comments.",
+      "category": "Engineering & Product Department",
+      "tags": [
+        "Engineering & Product Department",
+        "reviewing-frontend-code",
+        "reviewing-backend-code"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/08 Engineering & Product Department/pr-code-review",
+      "path": "workflows/pr-code-review",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "rag-eval-run",
+      "title": "RAG Eval Run",
+      "description": "Run an eval set against a RAG feature and report pass/fail.",
+      "category": "Engineering & Product Department",
+      "tags": [
+        "Engineering & Product Department",
+        "building-rag-systems"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/08 Engineering & Product Department/rag-eval-run",
+      "path": "workflows/rag-eval-run",
+      "hasDefinition": true,
+      "nodeCount": 7
+    },
+    {
+      "slug": "regulatory-change-monitor",
+      "title": "Regulatory Change Monitor",
+      "description": "Scan regulators/feeds daily and flag changes relevant to the business.",
+      "category": "Compliance & Regulatory",
+      "tags": [
+        "Legal Department",
+        "monitoring-compliance"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/04 Compliance & Regulatory/regulatory-change-monitor",
+      "path": "workflows/regulatory-change-monitor",
+      "hasDefinition": true,
+      "nodeCount": 7
+    },
+    {
+      "slug": "research-brief",
+      "title": "Research Brief on Demand",
+      "description": "Produce a sourced research brief from provided material.",
+      "category": "Operations & Knowledge Department",
+      "tags": [
+        "Operations & Knowledge Department",
+        "researching-markets",
+        "writing-prds"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/09 Operations & Knowledge Department/research-brief",
+      "path": "workflows/research-brief",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "seo-article-pipeline",
+      "title": "SEO Article Pipeline",
+      "description": "Expand a target keyword into an SEO-structured outline and draft.",
+      "category": "Marketing & Content Department",
+      "tags": [
+        "Marketing & Content Department",
+        "writing-seo-content"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/01 Marketing & Content Department/seo-article-pipeline",
+      "path": "workflows/seo-article-pipeline",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "social-repurpose",
+      "title": "Social Repurpose Studio",
+      "description": "Turn one long piece into platform-native posts for each channel.",
+      "category": "Marketing & Content Department",
+      "tags": [
+        "Marketing & Content Department",
+        "drafting-social-posts"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/01 Marketing & Content Department/social-repurpose",
+      "path": "workflows/social-repurpose",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "ticket-rag-reply",
+      "title": "Support RAG Reply",
+      "description": "Draft a grounded reply from your knowledge base for agent review.",
+      "category": "Customer Support Department",
+      "tags": [
+        "Customer Support Department",
+        "handling-support-tickets"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/03 Customer Support Department/ticket-rag-reply",
+      "path": "workflows/ticket-rag-reply",
+      "hasDefinition": true,
+      "nodeCount": 8
+    },
+    {
+      "slug": "ticket-triage-escalate",
+      "title": "Ticket Triage & Escalate",
+      "description": "Classify a support ticket, set priority, and route or escalate.",
+      "category": "Customer Support Department",
+      "tags": [
+        "Customer Support Department",
+        "handling-support-tickets",
+        "support-manager"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/03 Customer Support Department/ticket-triage-escalate",
+      "path": "workflows/ticket-triage-escalate",
+      "hasDefinition": true,
+      "nodeCount": 8
+    },
+    {
+      "slug": "trade-finance-doc-check",
+      "title": "Trade Finance Doc Check",
+      "description": "Check LC / Incoterms documents for consistency and discrepancies.",
+      "category": "Trade & Commodities Department",
+      "tags": [
+        "Trade & Commodities Department",
+        "structuring-trade-finance"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/06 Trade & Commodities Department/trade-finance-doc-check",
+      "path": "workflows/trade-finance-doc-check",
+      "hasDefinition": true,
+      "nodeCount": 6
+    },
+    {
+      "slug": "trademark-watch",
+      "title": "Trademark & GI Watch",
+      "description": "Scan watch results weekly for confusingly similar marks and flag risk.",
+      "category": "Intellectual Property",
+      "tags": [
+        "Legal Department",
+        "monitoring-compliance"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/07 Intellectual Property/trademark-watch",
+      "path": "workflows/trademark-watch",
+      "hasDefinition": true,
+      "nodeCount": 7
+    },
+    {
+      "slug": "transaction-tracker",
+      "title": "Transaction Milestone Tracker",
+      "description": "Scan live deals daily and flag milestones, documents, and deadlines due.",
+      "category": "Real Estate Brokerage",
+      "tags": [
+        "Real Estate Brokerage",
+        "coordinating-transactions"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/10 Real Estate Brokerage Department/transaction-tracker",
+      "path": "workflows/transaction-tracker",
+      "hasDefinition": true,
+      "nodeCount": 7
+    },
+    {
+      "slug": "viewing-scheduler",
+      "title": "Viewing Scheduler & Feedback",
+      "description": "Confirm a viewing request and prepare structured follow-up.",
+      "category": "Real Estate Brokerage",
+      "tags": [
+        "Real Estate Brokerage",
+        "scheduling-viewings"
+      ],
+      "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/10 Real Estate Brokerage Department/viewing-scheduler",
+      "path": "workflows/viewing-scheduler",
+      "hasDefinition": true,
+      "nodeCount": 6
+    }
+  ]
+}

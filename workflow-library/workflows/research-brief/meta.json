@@ -1,0 +1,15 @@
+{
+  "title": "Research Brief on Demand",
+  "slug": "research-brief",
+  "description": "Produce a sourced research brief from provided material.",
+  "category": "Operations & Knowledge Department",
+  "tags": [
+    "Operations & Knowledge Department",
+    "researching-markets",
+    "writing-prds"
+  ],
+  "trigger": "Webhook POST /research",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/09 Operations & Knowledge Department/research-brief",
+  "retrievedAt": "2026-09-22T16:18:14.179Z"
+}

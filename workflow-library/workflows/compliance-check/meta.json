@@ -1,0 +1,14 @@
+{
+  "title": "Compliance Check",
+  "slug": "compliance-check",
+  "description": "Run a compliance check on a proposed action and decide proceed / conditions / escalate.",
+  "category": "Compliance & Regulatory",
+  "tags": [
+    "Legal Department",
+    "checking-compliance"
+  ],
+  "trigger": "Webhook POST /compliance-check",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/04 Compliance & Regulatory/compliance-check",
+  "retrievedAt": "2026-09-22T16:18:14.206Z"
+}

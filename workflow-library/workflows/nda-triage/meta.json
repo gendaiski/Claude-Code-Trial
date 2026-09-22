@@ -1,0 +1,14 @@
+{
+  "title": "NDA Triage",
+  "slug": "nda-triage",
+  "description": "Triage an NDA GREEN/YELLOW/RED and draft a counter-position.",
+  "category": "NDA Fast-Track",
+  "tags": [
+    "Legal Department",
+    "triaging-ndas"
+  ],
+  "trigger": "Webhook POST /nda",
+  "nodeCount": 8,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/03 NDA Fast-Track/nda-triage",
+  "retrievedAt": "2026-09-22T16:18:14.205Z"
+}

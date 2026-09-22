@@ -1,0 +1,15 @@
+{
+  "title": "Listing Intake & Verify",
+  "slug": "listing-intake",
+  "description": "Capture a new listing, normalise details, and flag title/disclosure gaps.",
+  "category": "Real Estate Brokerage",
+  "tags": [
+    "Real Estate Brokerage",
+    "intaking-listings",
+    "checking-realestate-compliance"
+  ],
+  "trigger": "Webhook POST /re-listing",
+  "nodeCount": 8,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/10 Real Estate Brokerage Department/listing-intake",
+  "retrievedAt": "2026-09-22T16:18:14.194Z"
+}

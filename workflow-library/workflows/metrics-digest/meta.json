@@ -1,0 +1,14 @@
+{
+  "title": "Daily Metrics Digest",
+  "slug": "metrics-digest",
+  "description": "Pull the day's metrics and write a plain-English digest.",
+  "category": "Finance & Reporting Department",
+  "tags": [
+    "Finance & Reporting Department",
+    "reporting-manager"
+  ],
+  "trigger": "Schedule (daily)",
+  "nodeCount": 7,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/05 Finance & Reporting Department/metrics-digest",
+  "retrievedAt": "2026-09-22T16:18:14.159Z"
+}

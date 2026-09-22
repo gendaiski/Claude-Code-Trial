@@ -1,0 +1,13 @@
+{
+  "title": "Lead Qualify & Route",
+  "slug": "01-lead-qualify-and-route",
+  "description": "Qualify an inbound lead against your ICP; route good fits to the CRM + rep, archive the rest.",
+  "category": "General",
+  "tags": [],
+  "trigger": "Webhook POST /lead",
+  "integrations": "Anthropic API; CRM; Slack/Email",
+  "humanGate": "Rep approves the first-touch before it sends.",
+  "nodeCount": 8,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/01 Lead Qualify and Route",
+  "retrievedAt": "2026-09-22T16:18:14.122Z"
+}

@@ -1,0 +1,198 @@
+{
+  "name": "Contract Renewal & Obligation Watch",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "9dc1f717-0902-4af3-8a94-899528d5887e",
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://YOUR-CLM/contracts",
+        "options": {}
+      },
+      "id": "d8b6f868-da48-4c3e-ad19-1e4b74457997",
+      "name": "Fetch contract register (replace)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const input=$input.item.json;\nconst instruction=\"From this list of contracts (with dates and terms), flag anything with a renewal, expiry, notice deadline, or surviving obligation due in the next 30/60/90 days. Return {\\\"due\\\":[{\\\"contract\\\":\\\"...\\\",\\\"event\\\":\\\"...\\\",\\\"date\\\":\\\"...\\\",\\\"action\\\":\\\"...\\\"}]}. Drafting support, not legal advice \\u2014 a qualified lawyer reviews and signs; the workflow never sends, files, or executes anything; grounded steps use only provided sources; escalate contentious or high-value matters to counsel.\";\nconst content=instruction+\"\\n\\nINPUT DATA (JSON):\\n\"+JSON.stringify(input,null,2)+\"\\n\\nReturn ONLY valid JSON, no prose.\";\nreturn { json: { _input: input, claudeBody: { model: \"claude-sonnet-4-5\", max_tokens: 1200, messages: [ { role: \"user\", content } ] } } };"
+      },
+      "id": "51d1cd85-bd2e-45e3-b0d9-4a9a8060cb94",
+      "name": "Assess: build prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.claudeBody }}",
+        "options": {}
+      },
+      "id": "87323bac-2fd3-4715-afcd-597c05eef2ce",
+      "name": "Assess: ask Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        750,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "Anthropic API (Header Auth: x-api-key)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const txt=($json.content&&$json.content[0]&&$json.content[0].text)||\"\";\nlet data={};\ntry{const m=txt.match(/\\{[\\s\\S]*\\}/);data=m?JSON.parse(m[0]):{};}catch(e){data={};}\nreturn { json: { ...data, _raw: txt, _input: $json._input } };"
+      },
+      "id": "2fcab086-d847-424b-958b-a8aae299f7bc",
+      "name": "Assess: parse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        980,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "c3348dba-f875-4894-ae0f-4ed7e9f72fcb",
+      "name": "→ Alert the owners (replace)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "CONTRACT RENEWAL & OBLIGATION WATCH (daily)\n\n1) Point 'Fetch contract register' at your CLM/Sheet.\n2) Set the Anthropic credential.\n3) Swap the NoOp for your email/Slack node.\n4) Read-only; humans act on the alerts.",
+        "height": 340,
+        "width": 470,
+        "color": 6
+      },
+      "id": "fc40b000-2913-4785-a973-949846559fca",
+      "name": "Setup — read me",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        520,
+        560
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Fetch contract register (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch contract register (replace)": {
+      "main": [
+        [
+          {
+            "node": "Assess: build prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess: build prompt": {
+      "main": [
+        [
+          {
+            "node": "Assess: ask Claude",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess: ask Claude": {
+      "main": [
+        [
+          {
+            "node": "Assess: parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess: parse": {
+      "main": [
+        [
+          {
+            "node": "→ Alert the owners (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "the-ultimate-ai-book"
+  },
+  "tags": [
+    {
+      "name": "Legal Department"
+    }
+  ]
+}

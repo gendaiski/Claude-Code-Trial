@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/workflow-library/catalog.schema.json",
+  "title": "Workflow library catalog",
+  "type": "object",
+  "required": ["generatedAt", "count", "workflows"],
+  "properties": {
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "count": { "type": "integer", "minimum": 0 },
+    "workflows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["slug", "title", "category", "path", "hasDefinition"],
+        "properties": {
+          "slug": { "type": "string", "pattern": "^[^/]+$" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "category": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "source": { "type": "string" },
+          "path": { "type": "string" },
+          "hasDefinition": { "type": "boolean" },
+          "nodeCount": { "type": "integer", "minimum": 0 }
+        }
+      }
+    }
+  }
+}

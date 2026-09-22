@@ -1,0 +1,142 @@
+{
+  "name": "Content Draft & Approve",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "content-brief",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "6113102e-07bb-4591-9323-e0149a7ffe6f",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const input=$input.item.json;\nconst instruction=\"You are my content writer. From this brief, produce a draft in my voice plus a 4-slide carousel outline and one social post. Return {\\\"title\\\":\\\"...\\\",\\\"draft\\\":\\\"...\\\",\\\"carousel\\\":[\\\"slide1\\\",\\\"...\\\"],\\\"social_post\\\":\\\"...\\\"}.\";\nconst content=instruction+\"\\n\\nINPUT DATA (JSON):\\n\"+JSON.stringify(input,null,2)+\"\\n\\nReturn ONLY valid JSON, no prose.\";\nreturn { json: { _input: input, claudeBody: { model: \"claude-sonnet-4-5\", max_tokens: 1024, messages: [ { role: \"user\", content } ] } } };"
+      },
+      "id": "96f6e45d-c542-4556-941c-dd46fa27b76c",
+      "name": "Write: build prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.claudeBody }}",
+        "options": {}
+      },
+      "id": "0d88e7cd-c6e4-46b8-b2bf-183a8b8c0950",
+      "name": "Write: ask Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        490,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "Anthropic API (Header Auth: x-api-key)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const txt=($json.content&&$json.content[0]&&$json.content[0].text)||\"\";\nlet data={};\ntry{const m=txt.match(/\\{[\\s\\S]*\\}/);data=m?JSON.parse(m[0]):{};}catch(e){data={};}\nreturn { json: { ...data, _raw: txt, _input: $json._input } };"
+      },
+      "id": "281afcb2-91ed-44b3-be48-348e0118b58a",
+      "name": "Write: parse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "98b83eb0-95dd-472b-9656-1c1619e8a995",
+      "name": "→ Save draft + notify editor to approve (replace)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        960,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "CONTENT DRAFT & APPROVE\n\n1) POST a brief to /content-brief (topic, audience, pillar).\n2) Set the Anthropic credential and your voice/pillar in the prompt.\n3) Swap the NoOp for your Docs/Notion + Slack nodes.\n4) Editor approves before publishing.",
+        "height": 320,
+        "width": 460,
+        "color": 6
+      },
+      "id": "1eb0aedb-fd0e-4e80-a3c9-3aa5a42ea161",
+      "name": "Setup — read me",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        260,
+        520
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Write: build prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write: parse": {
+      "main": [
+        [
+          {
+            "node": "→ Save draft + notify editor to approve (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "the-ultimate-ai-book"
+  },
+  "tags": []
+}

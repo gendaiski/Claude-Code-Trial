@@ -1,0 +1,13 @@
+{
+  "title": "Contract Intake & Route",
+  "slug": "06-contract-intake-and-route",
+  "description": "Classify an inbound contract, flag top risks, and route by GREEN/YELLOW/RED to counsel.",
+  "category": "General",
+  "tags": [],
+  "trigger": "Webhook POST /contract",
+  "integrations": "Anthropic API; CLM/email; storage",
+  "humanGate": "Counsel reviews and signs; never auto-executes.",
+  "nodeCount": 8,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/06 Contract Intake and Route",
+  "retrievedAt": "2026-09-22T16:18:14.161Z"
+}

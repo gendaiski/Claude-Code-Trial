@@ -1,0 +1,14 @@
+{
+  "title": "Regulatory Change Monitor",
+  "slug": "regulatory-change-monitor",
+  "description": "Scan regulators/feeds daily and flag changes relevant to the business.",
+  "category": "Compliance & Regulatory",
+  "tags": [
+    "Legal Department",
+    "monitoring-compliance"
+  ],
+  "trigger": "Schedule (daily)",
+  "nodeCount": 7,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/04 Compliance & Regulatory/regulatory-change-monitor",
+  "retrievedAt": "2026-09-22T16:18:14.207Z"
+}

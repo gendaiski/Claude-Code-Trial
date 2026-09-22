@@ -1,0 +1,14 @@
+{
+  "title": "Job Description Draft",
+  "slug": "jd-draft",
+  "description": "Turn a role brief into a clear, inclusive job description.",
+  "category": "People & Hiring Department",
+  "tags": [
+    "People & Hiring Department",
+    "writing-job-descriptions"
+  ],
+  "trigger": "Webhook POST /jd",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/07 People & Hiring Department/jd-draft",
+  "retrievedAt": "2026-09-22T16:18:14.168Z"
+}

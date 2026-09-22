@@ -1,0 +1,198 @@
+{
+  "name": "RAG Eval Run",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "9b5c927c-2a7f-4582-9da3-276a99a3224f",
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://YOUR-EVALS/latest",
+        "options": {}
+      },
+      "id": "35b9e7ae-312d-4da3-baf1-96689acd1cf0",
+      "name": "Fetch eval set + answers (replace)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const input=$input.item.json;\nconst instruction=\"Grade these RAG answers against their expected answers for groundedness and correctness. Return {\\\"pass\\\":0,\\\"fail\\\":0,\\\"failures\\\":[{\\\"q\\\":\\\"...\\\",\\\"why\\\":\\\"...\\\"}],\\\"grounded_rate\\\":\\\"...\\\"}. A human reviews and approves before anything is sent, posted, paid, published, or executed; grounded steps use only provided sources; the workflow drafts and routes, it does not act autonomously.\";\nconst content=instruction+\"\\n\\nINPUT DATA (JSON):\\n\"+JSON.stringify(input,null,2)+\"\\n\\nReturn ONLY valid JSON, no prose.\";\nreturn { json: { _input: input, claudeBody: { model: \"claude-sonnet-4-5\", max_tokens: 1200, messages: [ { role: \"user\", content } ] } } };"
+      },
+      "id": "48079cc4-20ac-4ddd-98bf-5d9a4ae51775",
+      "name": "Assess: build prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.claudeBody }}",
+        "options": {}
+      },
+      "id": "8138fc9f-e5e1-435c-a66a-69e2e7681ac8",
+      "name": "Assess: ask Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        750,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "Anthropic API (Header Auth: x-api-key)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const txt=($json.content&&$json.content[0]&&$json.content[0].text)||\"\";\nlet data={};\ntry{const m=txt.match(/\\{[\\s\\S]*\\}/);data=m?JSON.parse(m[0]):{};}catch(e){data={};}\nreturn { json: { ...data, _raw: txt, _input: $json._input } };"
+      },
+      "id": "933274ad-19a0-49aa-886f-d57a3da4c23a",
+      "name": "Assess: parse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        980,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "e41b7cd2-1a29-47fb-a2c5-8cacf530300c",
+      "name": "→ Post eval report (replace)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1220,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "RAG EVAL RUN (daily)\n\n1) Point 'Fetch eval set + answers' at your eval store.\n2) Set the Anthropic credential.\n3) Swap the NoOp for your report node.\n4) Engineers act on regressions.",
+        "height": 320,
+        "width": 470,
+        "color": 6
+      },
+      "id": "e79325e3-db92-457b-931e-9950ddc07c7f",
+      "name": "Setup — read me",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        520,
+        560
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Fetch eval set + answers (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch eval set + answers (replace)": {
+      "main": [
+        [
+          {
+            "node": "Assess: build prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess: build prompt": {
+      "main": [
+        [
+          {
+            "node": "Assess: ask Claude",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess: ask Claude": {
+      "main": [
+        [
+          {
+            "node": "Assess: parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess: parse": {
+      "main": [
+        [
+          {
+            "node": "→ Post eval report (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "the-ultimate-ai-book"
+  },
+  "tags": [
+    {
+      "name": "Engineering & Product Department"
+    }
+  ]
+}

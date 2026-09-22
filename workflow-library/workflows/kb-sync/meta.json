@@ -1,0 +1,14 @@
+{
+  "title": "Knowledge Base Sync",
+  "slug": "kb-sync",
+  "description": "Summarise new documents into the knowledge base daily.",
+  "category": "Operations & Knowledge Department",
+  "tags": [
+    "Operations & Knowledge Department",
+    "the-ai-second-brain"
+  ],
+  "trigger": "Schedule (daily)",
+  "nodeCount": 7,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/09 Operations & Knowledge Department/kb-sync",
+  "retrievedAt": "2026-09-22T16:18:14.177Z"
+}

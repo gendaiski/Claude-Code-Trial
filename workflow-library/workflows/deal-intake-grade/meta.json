@@ -1,0 +1,16 @@
+{
+  "title": "Deal Intake & Routing",
+  "slug": "deal-intake-grade",
+  "description": "Classify an incoming deal, note grade/spec, and route it.",
+  "category": "Trade & Commodities Department",
+  "tags": [
+    "Trade & Commodities Department",
+    "trade-ops-manager",
+    "classifying-egyptian-cotton",
+    "appraising-gemstones"
+  ],
+  "trigger": "Webhook POST /deal",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/06 Trade & Commodities Department/deal-intake-grade",
+  "retrievedAt": "2026-09-22T16:18:14.165Z"
+}

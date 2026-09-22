@@ -1,0 +1,14 @@
+{
+  "title": "SEO Article Pipeline",
+  "slug": "seo-article-pipeline",
+  "description": "Expand a target keyword into an SEO-structured outline and draft.",
+  "category": "Marketing & Content Department",
+  "tags": [
+    "Marketing & Content Department",
+    "writing-seo-content"
+  ],
+  "trigger": "Webhook POST /seo-article",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/01 Marketing & Content Department/seo-article-pipeline",
+  "retrievedAt": "2026-09-22T16:18:14.142Z"
+}

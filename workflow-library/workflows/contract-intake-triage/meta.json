@@ -1,0 +1,15 @@
+{
+  "title": "Contract Intake & Triage",
+  "slug": "contract-intake-triage",
+  "description": "Detect contract type and parties, flag risk, and route GREEN/YELLOW/RED.",
+  "category": "Contracts Team",
+  "tags": [
+    "Legal Department",
+    "intaking-contracts",
+    "reviewing-commercial-contracts"
+  ],
+  "trigger": "Webhook POST /contract",
+  "nodeCount": 8,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/02 Contracts Team/contract-intake-triage",
+  "retrievedAt": "2026-09-22T16:18:14.202Z"
+}

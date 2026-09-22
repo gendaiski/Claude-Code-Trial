@@ -1,0 +1,14 @@
+{
+  "title": "DSAR Intake & Triage",
+  "slug": "dsar-intake-triage",
+  "description": "Triage a data-subject request, set the statutory clock, and open the case.",
+  "category": "Data Protection & Privacy",
+  "tags": [
+    "Legal Department",
+    "reviewing-data-protection"
+  ],
+  "trigger": "Webhook POST /dsar",
+  "nodeCount": 6,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/05 Data Protection & Privacy/dsar-intake-triage",
+  "retrievedAt": "2026-09-22T16:18:14.209Z"
+}

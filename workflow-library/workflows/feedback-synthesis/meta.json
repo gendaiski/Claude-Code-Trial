@@ -1,0 +1,14 @@
+{
+  "title": "Weekly Feedback Synthesis",
+  "slug": "feedback-synthesis",
+  "description": "Turn the week's tickets and reviews into a voice-of-customer brief.",
+  "category": "Customer Support Department",
+  "tags": [
+    "Customer Support Department",
+    "customer-feedback-synthesis"
+  ],
+  "trigger": "Schedule (weekly)",
+  "nodeCount": 7,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/03 Customer Support Department/feedback-synthesis",
+  "retrievedAt": "2026-09-22T16:18:14.152Z"
+}

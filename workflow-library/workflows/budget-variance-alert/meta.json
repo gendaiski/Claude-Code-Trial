@@ -1,0 +1,14 @@
+{
+  "title": "Budget Variance Alert",
+  "slug": "budget-variance-alert",
+  "description": "Scan actuals weekly and flag material budget variances.",
+  "category": "Finance & Reporting Department",
+  "tags": [
+    "Finance & Reporting Department",
+    "budgeting-and-forecasting"
+  ],
+  "trigger": "Schedule (weekly)",
+  "nodeCount": 7,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/05 Finance & Reporting Department/budget-variance-alert",
+  "retrievedAt": "2026-09-22T16:18:14.158Z"
+}

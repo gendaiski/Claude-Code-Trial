@@ -1,0 +1,172 @@
+{
+  "name": "Weekly Feedback Synthesis",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "weeksInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "318729fb-011b-49de-a14e-f54510afe2a8",
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://YOUR-SOURCE/feedback",
+        "options": {}
+      },
+      "id": "462a5e8f-4d60-47d3-8ae0-f7d8800788d0",
+      "name": "Pull feedback (reviews/tickets/surveys) (replace)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const input=$input.item.json;\nconst instruction=\"You are a product analyst. From the collected feedback, produce the top themes with a count, sentiment, one representative quote each, and a ranked priority. Return {\\\"themes\\\":[{\\\"theme\\\":\\\"...\\\",\\\"count\\\":0,\\\"sentiment\\\":\\\"...\\\",\\\"quote\\\":\\\"...\\\"}],\\\"summary\\\":\\\"...\\\"}.\";\nconst content=instruction+\"\\n\\nINPUT DATA (JSON):\\n\"+JSON.stringify(input,null,2)+\"\\n\\nReturn ONLY valid JSON, no prose.\";\nreturn { json: { _input: input, claudeBody: { model: \"claude-sonnet-4-5\", max_tokens: 1500, messages: [ { role: \"user\", content } ] } } };"
+      },
+      "id": "50a644d8-59c7-480b-8ea8-a461831fd9d8",
+      "name": "Synthesise: build prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.claudeBody }}",
+        "options": {}
+      },
+      "id": "8f6d2b83-ee59-406c-8713-2cf7a34ac5b0",
+      "name": "Synthesise: ask Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        950,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_ME",
+          "name": "Anthropic API (Header Auth: x-api-key)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const txt=($json.content&&$json.content[0]&&$json.content[0].text)||\"\";\nlet data={};\ntry{const m=txt.match(/\\{[\\s\\S]*\\}/);data=m?JSON.parse(m[0]):{};}catch(e){data={};}\nreturn { json: { ...data, _raw: txt, _input: $json._input } };"
+      },
+      "id": "760ef1a3-4461-481f-89e0-bae3d4ea6cc2",
+      "name": "Synthesise: parse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1180,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "45ab0159-3675-45ef-a177-d0701fc1cae9",
+      "name": "→ Post one-page brief (replace)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1420,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "WEEKLY FEEDBACK SYNTHESIS\n\n1) Point 'Pull feedback' at your sources (helpdesk/reviews/survey export).\n2) Set the Anthropic credential.\n3) Swap the NoOp for your Slack/Docs node.\n4) Don't over-generalise from a few loud voices — the prompt sizes each theme.",
+        "height": 320,
+        "width": 460,
+        "color": 6
+      },
+      "id": "4ad54d8e-328b-4532-8b54-af31324813d5",
+      "name": "Setup — read me",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        260,
+        540
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Pull feedback (reviews/tickets/surveys) (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pull feedback (reviews/tickets/surveys) (replace)": {
+      "main": [
+        [
+          {
+            "node": "Synthesise: build prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Synthesise: parse": {
+      "main": [
+        [
+          {
+            "node": "→ Post one-page brief (replace)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "the-ultimate-ai-book"
+  },
+  "tags": []
+}

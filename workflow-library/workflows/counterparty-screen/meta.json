@@ -1,0 +1,14 @@
+{
+  "title": "Counterparty & Sanctions Screen",
+  "slug": "counterparty-screen",
+  "description": "Screen a counterparty and summarise risk for review.",
+  "category": "Trade & Commodities Department",
+  "tags": [
+    "Trade & Commodities Department",
+    "compliance-monitoring"
+  ],
+  "trigger": "Webhook POST /counterparty",
+  "nodeCount": 8,
+  "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/06 Trade & Commodities Department/counterparty-screen",
+  "retrievedAt": "2026-09-22T16:18:14.164Z"
+}
