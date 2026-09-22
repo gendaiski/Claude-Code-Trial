@@ -10,5 +10,5 @@
   "trigger": "Webhook POST /litigation-hold",
   "nodeCount": 6,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/06 Litigation & Disputes/litigation-hold-notice",
-  "retrievedAt": "2026-09-22T14:56:03.472Z"
+  "retrievedAt": "2026-09-22T16:18:14.212Z"
 }

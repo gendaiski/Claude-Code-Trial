@@ -10,5 +10,5 @@
   "trigger": "Webhook POST /ip-intake",
   "nodeCount": 6,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/07 Intellectual Property/ip-intake-triage",
-  "retrievedAt": "2026-09-22T14:56:03.473Z"
+  "retrievedAt": "2026-09-22T16:18:14.213Z"
 }

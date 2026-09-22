@@ -11,5 +11,5 @@
   "trigger": "Webhook POST /month-close",
   "nodeCount": 6,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/05 Finance & Reporting Department/month-close-report",
-  "retrievedAt": "2026-09-22T14:56:03.433Z"
+  "retrievedAt": "2026-09-22T16:18:14.159Z"
 }

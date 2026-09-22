@@ -17,6 +17,10 @@ workflows/<slug>/
 and the table below is generated from it. Both are rebuilt with one command, so
 the catalog can never drift from what is actually on disk.
 
+**New to this?** Start with
+[docs/GETTING-STARTED.md](docs/GETTING-STARTED.md) — it walks through running
+your first workflow with no prior experience assumed.
+
 ## Getting the workflows in
 
 ```bash
@@ -35,7 +39,9 @@ node scripts/build-catalog.mjs
 ```
 
 Full notes, including what to do when the site's markup doesn't match what the
-fetcher expects, are in [docs/IMPORTING.md](docs/IMPORTING.md).
+fetcher expects, are in [docs/IMPORTING.md](docs/IMPORTING.md). To move this
+library into its own GitHub repository without using a terminal, see
+[docs/PUBLISHING.md](docs/PUBLISHING.md).
 
 ## Using a workflow
 
@@ -68,8 +74,9 @@ is present. CI runs it on every push.
 | `npm run import:tree -- <path>` | Import a department-organised n8n tree |
 | `npm run catalog` | Rebuild `catalog/index.json` and the table below |
 | `npm run verify` | Check every definition is sound and safe to import |
+| `npm run checksums` | Check no definition has drifted from its source |
 | `npm run validate` | Fail if the catalog is stale |
-| `npm run check` | Both of the above — what CI runs |
+| `npm run check` | All three — what CI runs |
 
 ## Library
 
@@ -221,12 +228,17 @@ Every workflow records where it came from and when, in its `meta.json` `source`
 field. All 51 were imported from the owner's own Dropbox, under
 `n8n Workflows (Ready-Made)`.
 
-They have **not** been reconciled against the published
+**Each one is byte-identical to its source.** `catalog/provenance.json` holds
+the Dropbox content hash of every source file, and `npm run checksums`
+recomputes it from what is on disk — no network needed. All 51 matched at
+import, and CI re-checks on every push, so a definition cannot drift unnoticed.
+
+What has **not** happened is a comparison against the published
 [workflowhubegy.com/library](https://workflowhubegy.com/library) listing, which
-the import environment could not reach — so treat this as a mirror of the
-Dropbox set, not a verified copy of the published one. Once the site is
-reachable, `scripts/fetch-library.mjs` will pull the published listing into the
-same layout and git will show the difference.
+the import environment cannot reach. This is a verified mirror of the Dropbox
+set; whether that set matches the published one is still unknown. Once the site
+is reachable, `scripts/fetch-library.mjs` pulls the published listing into the
+same layout and git shows the difference.
 
 Nothing here is re-licensed — the original terms attached to each workflow
 still apply.

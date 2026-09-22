@@ -10,5 +10,5 @@
   "trigger": "Webhook POST /nda",
   "nodeCount": 8,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/03 NDA Fast-Track/nda-triage",
-  "retrievedAt": "2026-09-22T14:56:03.466Z"
+  "retrievedAt": "2026-09-22T16:18:14.205Z"
 }

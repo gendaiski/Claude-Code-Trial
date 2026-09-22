@@ -10,5 +10,5 @@
   "trigger": "Webhook POST /outbound",
   "nodeCount": 6,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/02 Sales & Growth Department/outbound-sequence",
-  "retrievedAt": "2026-09-22T14:56:03.409Z"
+  "retrievedAt": "2026-09-22T16:18:14.150Z"
 }

@@ -11,5 +11,5 @@
   "trigger": "Webhook POST /re-lead",
   "nodeCount": 8,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/10 Real Estate Brokerage Department/lead-capture-qualify",
-  "retrievedAt": "2026-09-22T14:56:03.456Z"
+  "retrievedAt": "2026-09-22T16:18:14.190Z"
 }

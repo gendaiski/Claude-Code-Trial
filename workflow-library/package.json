@@ -11,7 +11,8 @@
     "catalog": "node scripts/build-catalog.mjs",
     "validate": "node scripts/build-catalog.mjs --check",
     "verify": "node scripts/verify.mjs",
-    "check": "node scripts/verify.mjs && node scripts/build-catalog.mjs --check"
+    "check": "node scripts/verify.mjs && node scripts/checksums.mjs && node scripts/build-catalog.mjs --check",
+    "checksums": "node scripts/checksums.mjs"
   },
   "engines": {
     "node": ">=18"

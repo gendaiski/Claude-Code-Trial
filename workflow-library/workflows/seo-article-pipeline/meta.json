@@ -10,5 +10,5 @@
   "trigger": "Webhook POST /seo-article",
   "nodeCount": 6,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/01 Marketing & Content Department/seo-article-pipeline",
-  "retrievedAt": "2026-09-22T14:56:03.398Z"
+  "retrievedAt": "2026-09-22T16:18:14.142Z"
 }

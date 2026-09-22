@@ -10,5 +10,5 @@
   "trigger": "Webhook POST /re-viewing",
   "nodeCount": 6,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/10 Real Estate Brokerage Department/viewing-scheduler",
-  "retrievedAt": "2026-09-22T14:56:03.461Z"
+  "retrievedAt": "2026-09-22T16:18:14.200Z"
 }

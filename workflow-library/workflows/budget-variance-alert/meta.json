@@ -10,5 +10,5 @@
   "trigger": "Schedule (weekly)",
   "nodeCount": 7,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/05 Finance & Reporting Department/budget-variance-alert",
-  "retrievedAt": "2026-09-22T14:56:03.429Z"
+  "retrievedAt": "2026-09-22T16:18:14.158Z"
 }

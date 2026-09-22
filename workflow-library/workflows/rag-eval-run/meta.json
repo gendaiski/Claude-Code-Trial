@@ -10,5 +10,5 @@
   "trigger": "Schedule (daily)",
   "nodeCount": 7,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/08 Engineering & Product Department/rag-eval-run",
-  "retrievedAt": "2026-09-22T14:56:03.448Z"
+  "retrievedAt": "2026-09-22T16:18:14.174Z"
 }

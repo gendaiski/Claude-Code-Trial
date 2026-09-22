@@ -10,5 +10,5 @@
   "trigger": "Webhook POST /jd",
   "nodeCount": 6,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/07 People & Hiring Department/jd-draft",
-  "retrievedAt": "2026-09-22T14:56:03.442Z"
+  "retrievedAt": "2026-09-22T16:18:14.168Z"
 }

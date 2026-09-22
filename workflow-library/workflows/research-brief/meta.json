@@ -11,5 +11,5 @@
   "trigger": "Webhook POST /research",
   "nodeCount": 6,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/09 Operations & Knowledge Department/research-brief",
-  "retrievedAt": "2026-09-22T14:56:03.451Z"
+  "retrievedAt": "2026-09-22T16:18:14.179Z"
 }

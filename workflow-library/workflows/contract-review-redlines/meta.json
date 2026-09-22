@@ -11,5 +11,5 @@
   "trigger": "Webhook POST /contract-review",
   "nodeCount": 6,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/02 Contracts Team/contract-review-redlines",
-  "retrievedAt": "2026-09-22T14:56:03.465Z"
+  "retrievedAt": "2026-09-22T16:18:14.204Z"
 }

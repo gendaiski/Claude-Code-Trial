@@ -9,5 +9,5 @@
   "humanGate": "Human sends replies until trusted; humans handle escalations.",
   "nodeCount": 9,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/05 Support Ticket RAG Reply",
-  "retrievedAt": "2026-09-22T14:56:03.434Z"
+  "retrievedAt": "2026-09-22T16:18:14.160Z"
 }

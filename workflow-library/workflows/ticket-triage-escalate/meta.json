@@ -11,5 +11,5 @@
   "trigger": "Webhook POST /ticket",
   "nodeCount": 8,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/03 Customer Support Department/ticket-triage-escalate",
-  "retrievedAt": "2026-09-22T14:56:03.423Z"
+  "retrievedAt": "2026-09-22T16:18:14.156Z"
 }

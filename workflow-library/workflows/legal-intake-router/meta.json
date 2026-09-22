@@ -10,5 +10,5 @@
   "trigger": "Webhook POST /legal-intake",
   "nodeCount": 7,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/Legal Department/01 Intake & Routing/legal-intake-router",
-  "retrievedAt": "2026-09-22T14:56:03.462Z"
+  "retrievedAt": "2026-09-22T16:18:14.201Z"
 }

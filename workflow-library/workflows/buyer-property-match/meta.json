@@ -10,5 +10,5 @@
   "trigger": "Schedule (daily)",
   "nodeCount": 7,
   "source": "dropbox:/Claude Projects/.../n8n Workflows (Ready-Made)/10 Real Estate Brokerage Department/buyer-property-match",
-  "retrievedAt": "2026-09-22T14:56:03.452Z"
+  "retrievedAt": "2026-09-22T16:18:14.180Z"
 }
