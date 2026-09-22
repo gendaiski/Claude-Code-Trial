@@ -1,0 +1,28 @@
+{
+  "name": "termly",
+  "version": "0.1.0",
+  "description": "A small terminal CLI.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "termly": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22.6"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "node src/cli.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.8.3",
+    "vitest": "^5.0.1"
+  }
+}
