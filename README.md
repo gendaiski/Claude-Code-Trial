@@ -86,3 +86,12 @@ npm run build       # emit dist/
 `src/commands/start.ts` marks the spot where the real work belongs — the block
 between the `--- real work goes here ---` comments. Everything around it
 (argument parsing, config resolution, shutdown handling, exit codes) is done.
+
+## Status (Codex, 2026-10-19)
+
+**Result: partly.** Checked `claude/project-startup-67e4ib` at `ad0577e94ec014c93a30ff859f42e1bbdb1ef6f4`.
+
+- **Verified:** npm ci; npm run typecheck; npm test (25 passed); npm run build all succeeded. Started node dist/cli.js start and inspected src/commands/start.ts.
+- **Limits / next step:** The command prints a listening address but only logs and waits for a signal; it does not create the claimed server/socket. A real terminal/session service remains to be implemented. The startup probe was stopped after a timeout, not counted as a successful server test. The earlier claude/project-startup-ozey4b branch listed for the first Termly project returns 404; recover that branch or session export separately.
+
+Checks ran in a managed Linux environment; browser checks used Chromium over localhost. Results certify only the stated scope, not production readiness. No secret values, deployments or repository visibility changes were made. Upstream licences and notices are retained.
